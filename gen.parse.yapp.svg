@@ -9,8 +9,56 @@
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 446)">
 <title>Perl</title>
 <polygon fill="white" stroke="transparent" points="-4,4 -4,-446 174,-446 174,4 -4,4"/>
-<!-- exp -->
+<!-- $start -->
 <g id="node1" class="node">
+<title>$start</title>
+<path fill="none" stroke="blue" d="M12,-405.5C12,-405.5 146,-405.5 146,-405.5 152,-405.5 158,-411.5 158,-417.5 158,-417.5 158,-429.5 158,-429.5 158,-435.5 152,-441.5 146,-441.5 146,-441.5 12,-441.5 12,-441.5 6,-441.5 0,-435.5 0,-429.5 0,-429.5 0,-417.5 0,-417.5 0,-411.5 6,-405.5 12,-405.5"/>
+<text text-anchor="middle" x="30" y="-419.8" font-family="Times,serif" font-size="14.00">$start</text>
+<polyline fill="none" stroke="blue" points="60,-405.5 60,-441.5 "/>
+<text text-anchor="middle" x="109" y="-419.8" font-family="Times,serif" font-size="14.00">input $end </text>
+</g>
+<!-- input -->
+<g id="node2" class="node">
+<title>input</title>
+<path fill="none" stroke="blue" d="M19.5,-330.5C19.5,-330.5 138.5,-330.5 138.5,-330.5 144.5,-330.5 150.5,-336.5 150.5,-342.5 150.5,-342.5 150.5,-356.5 150.5,-356.5 150.5,-362.5 144.5,-368.5 138.5,-368.5 138.5,-368.5 19.5,-368.5 19.5,-368.5 13.5,-368.5 7.5,-362.5 7.5,-356.5 7.5,-356.5 7.5,-342.5 7.5,-342.5 7.5,-336.5 13.5,-330.5 19.5,-330.5"/>
+<text text-anchor="middle" x="34.5" y="-345.8" font-family="Times,serif" font-size="14.00">input</text>
+<polyline fill="none" stroke="blue" points="61.5,-330.5 61.5,-368.5 "/>
+<text text-anchor="middle" x="106" y="-353.3" font-family="Times,serif" font-size="14.00">(empty) </text>
+<text text-anchor="middle" x="106" y="-338.3" font-family="Times,serif" font-size="14.00">input line </text>
+</g>
+<!-- $start&#45;&gt;input -->
+<g id="edge1" class="edge">
+<title>$start&#45;&gt;input</title>
+<path fill="none" stroke="grey" d="M79,-405.44C79,-397.49 79,-387.81 79,-378.81"/>
+<polygon fill="grey" stroke="grey" points="82.5,-378.7 79,-368.7 75.5,-378.7 82.5,-378.7"/>
+</g>
+<!-- input&#45;&gt;input -->
+<g id="edge3" class="edge">
+<title>input&#45;&gt;input</title>
+<path fill="none" stroke="grey" d="M150.63,-362.09C161.29,-360.13 168.5,-355.93 168.5,-349.5 168.5,-345.28 165.39,-342.02 160.25,-339.73"/>
+<polygon fill="grey" stroke="grey" points="161.21,-336.36 150.63,-336.91 159.24,-343.08 161.21,-336.36"/>
+</g>
+<!-- line -->
+<g id="node4" class="node">
+<title>line</title>
+<path fill="none" stroke="blue" d="M38.5,-195.5C38.5,-195.5 119.5,-195.5 119.5,-195.5 125.5,-195.5 131.5,-201.5 131.5,-207.5 131.5,-207.5 131.5,-281.5 131.5,-281.5 131.5,-287.5 125.5,-293.5 119.5,-293.5 119.5,-293.5 38.5,-293.5 38.5,-293.5 32.5,-293.5 26.5,-287.5 26.5,-281.5 26.5,-281.5 26.5,-207.5 26.5,-207.5 26.5,-201.5 32.5,-195.5 38.5,-195.5"/>
+<text text-anchor="middle" x="48" y="-240.8" font-family="Times,serif" font-size="14.00">line</text>
+<polyline fill="none" stroke="blue" points="69.5,-195.5 69.5,-293.5 "/>
+<text text-anchor="middle" x="100.5" y="-278.3" font-family="Times,serif" font-size="14.00">&#39;</text>
+<text text-anchor="middle" x="100.5" y="-263.3" font-family="Times,serif" font-size="14.00">&#39; </text>
+<text text-anchor="middle" x="100.5" y="-248.3" font-family="Times,serif" font-size="14.00">exp &#39;</text>
+<text text-anchor="middle" x="100.5" y="-233.3" font-family="Times,serif" font-size="14.00">&#39; </text>
+<text text-anchor="middle" x="100.5" y="-218.3" font-family="Times,serif" font-size="14.00">error &#39;</text>
+<text text-anchor="middle" x="100.5" y="-203.3" font-family="Times,serif" font-size="14.00">&#39; </text>
+</g>
+<!-- input&#45;&gt;line -->
+<g id="edge4" class="edge">
+<title>input&#45;&gt;line</title>
+<path fill="none" stroke="grey" d="M79,-330.09C79,-322.61 79,-313.51 79,-304.1"/>
+<polygon fill="grey" stroke="grey" points="82.5,-303.81 79,-293.81 75.5,-303.81 82.5,-303.81"/>
+</g>
+<!-- exp -->
+<g id="node3" class="node">
 <title>exp</title>
 <path fill="none" stroke="blue" d="M18,-0.5C18,-0.5 140,-0.5 140,-0.5 146,-0.5 152,-6.5 152,-12.5 152,-12.5 152,-146.5 152,-146.5 152,-152.5 146,-158.5 140,-158.5 140,-158.5 18,-158.5 18,-158.5 12,-158.5 6,-152.5 6,-146.5 6,-146.5 6,-12.5 6,-12.5 6,-6.5 12,-0.5 18,-0.5"/>
 <text text-anchor="middle" x="27" y="-75.8" font-family="Times,serif" font-size="14.00">exp</text>
@@ -27,64 +75,16 @@
 <text text-anchor="middle" x="100" y="-8.3" font-family="Times,serif" font-size="14.00">&#39;(&#39; exp &#39;)&#39; </text>
 </g>
 <!-- exp&#45;&gt;exp -->
-<g id="edge1" class="edge">
+<g id="edge2" class="edge">
 <title>exp&#45;&gt;exp</title>
 <path fill="none" stroke="grey" d="M152.19,-107.25C162.83,-102.84 170,-93.59 170,-79.5 170,-69.81 166.61,-62.41 161.04,-57.3"/>
 <polygon fill="grey" stroke="grey" points="162.52,-54.1 152.19,-51.75 158.8,-60.03 162.52,-54.1"/>
-</g>
-<!-- input -->
-<g id="node2" class="node">
-<title>input</title>
-<path fill="none" stroke="blue" d="M19.5,-330.5C19.5,-330.5 138.5,-330.5 138.5,-330.5 144.5,-330.5 150.5,-336.5 150.5,-342.5 150.5,-342.5 150.5,-356.5 150.5,-356.5 150.5,-362.5 144.5,-368.5 138.5,-368.5 138.5,-368.5 19.5,-368.5 19.5,-368.5 13.5,-368.5 7.5,-362.5 7.5,-356.5 7.5,-356.5 7.5,-342.5 7.5,-342.5 7.5,-336.5 13.5,-330.5 19.5,-330.5"/>
-<text text-anchor="middle" x="34.5" y="-345.8" font-family="Times,serif" font-size="14.00">input</text>
-<polyline fill="none" stroke="blue" points="61.5,-330.5 61.5,-368.5 "/>
-<text text-anchor="middle" x="106" y="-353.3" font-family="Times,serif" font-size="14.00">(empty) </text>
-<text text-anchor="middle" x="106" y="-338.3" font-family="Times,serif" font-size="14.00">input line </text>
-</g>
-<!-- input&#45;&gt;input -->
-<g id="edge3" class="edge">
-<title>input&#45;&gt;input</title>
-<path fill="none" stroke="grey" d="M150.63,-362.09C161.29,-360.13 168.5,-355.93 168.5,-349.5 168.5,-345.28 165.39,-342.02 160.25,-339.73"/>
-<polygon fill="grey" stroke="grey" points="161.21,-336.36 150.63,-336.91 159.24,-343.08 161.21,-336.36"/>
-</g>
-<!-- line -->
-<g id="node3" class="node">
-<title>line</title>
-<path fill="none" stroke="blue" d="M38.5,-195.5C38.5,-195.5 119.5,-195.5 119.5,-195.5 125.5,-195.5 131.5,-201.5 131.5,-207.5 131.5,-207.5 131.5,-281.5 131.5,-281.5 131.5,-287.5 125.5,-293.5 119.5,-293.5 119.5,-293.5 38.5,-293.5 38.5,-293.5 32.5,-293.5 26.5,-287.5 26.5,-281.5 26.5,-281.5 26.5,-207.5 26.5,-207.5 26.5,-201.5 32.5,-195.5 38.5,-195.5"/>
-<text text-anchor="middle" x="48" y="-240.8" font-family="Times,serif" font-size="14.00">line</text>
-<polyline fill="none" stroke="blue" points="69.5,-195.5 69.5,-293.5 "/>
-<text text-anchor="middle" x="100.5" y="-278.3" font-family="Times,serif" font-size="14.00">&#39;</text>
-<text text-anchor="middle" x="100.5" y="-263.3" font-family="Times,serif" font-size="14.00">&#39; </text>
-<text text-anchor="middle" x="100.5" y="-248.3" font-family="Times,serif" font-size="14.00">exp &#39;</text>
-<text text-anchor="middle" x="100.5" y="-233.3" font-family="Times,serif" font-size="14.00">&#39; </text>
-<text text-anchor="middle" x="100.5" y="-218.3" font-family="Times,serif" font-size="14.00">error &#39;</text>
-<text text-anchor="middle" x="100.5" y="-203.3" font-family="Times,serif" font-size="14.00">&#39; </text>
-</g>
-<!-- input&#45;&gt;line -->
-<g id="edge2" class="edge">
-<title>input&#45;&gt;line</title>
-<path fill="none" stroke="grey" d="M79,-330.09C79,-322.61 79,-313.51 79,-304.1"/>
-<polygon fill="grey" stroke="grey" points="82.5,-303.81 79,-293.81 75.5,-303.81 82.5,-303.81"/>
 </g>
 <!-- line&#45;&gt;exp -->
 <g id="edge5" class="edge">
 <title>line&#45;&gt;exp</title>
 <path fill="none" stroke="grey" d="M79,-195.48C79,-187.08 79,-178.12 79,-169.04"/>
 <polygon fill="grey" stroke="grey" points="82.5,-168.75 79,-158.75 75.5,-168.76 82.5,-168.75"/>
-</g>
-<!-- $start -->
-<g id="node4" class="node">
-<title>$start</title>
-<path fill="none" stroke="blue" d="M12,-405.5C12,-405.5 146,-405.5 146,-405.5 152,-405.5 158,-411.5 158,-417.5 158,-417.5 158,-429.5 158,-429.5 158,-435.5 152,-441.5 146,-441.5 146,-441.5 12,-441.5 12,-441.5 6,-441.5 0,-435.5 0,-429.5 0,-429.5 0,-417.5 0,-417.5 0,-411.5 6,-405.5 12,-405.5"/>
-<text text-anchor="middle" x="30" y="-419.8" font-family="Times,serif" font-size="14.00">$start</text>
-<polyline fill="none" stroke="blue" points="60,-405.5 60,-441.5 "/>
-<text text-anchor="middle" x="109" y="-419.8" font-family="Times,serif" font-size="14.00">input $end </text>
-</g>
-<!-- $start&#45;&gt;input -->
-<g id="edge4" class="edge">
-<title>$start&#45;&gt;input</title>
-<path fill="none" stroke="grey" d="M79,-405.44C79,-397.49 79,-387.81 79,-378.81"/>
-<polygon fill="grey" stroke="grey" points="82.5,-378.7 79,-368.7 75.5,-378.7 82.5,-378.7"/>
 </g>
 </g>
 </svg>
