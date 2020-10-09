@@ -47,8 +47,8 @@
 <!-- Chadstone&#45;&gt;Notting Hill -->
 <g id="edge3" class="edge">
 <title>Chadstone&#45;&gt;Notting Hill</title>
-<path fill="none" stroke="grey" d="M176,-178.83C176.33,-178.55 176.67,-178.28 177,-178 180.42,-175.13 183.19,-172.26 185.48,-169.4"/>
-<polygon fill="grey" stroke="grey" points="188.55,-171.08 191,-160.78 182.66,-167.31 188.55,-171.08"/>
+<path fill="none" stroke="grey" d="M145.91,-194.38C157.03,-190.71 168.11,-185.47 177,-178 205.61,-153.96 189.38,-130.2 215,-103 226.04,-91.28 240.82,-81.65 254.48,-74.36"/>
+<polygon fill="grey" stroke="grey" points="256.36,-77.33 263.69,-69.68 253.19,-71.08 256.36,-77.33"/>
 </g>
 <!-- Hughesdale -->
 <g id="node3" class="node">
