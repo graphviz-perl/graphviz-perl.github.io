@@ -1414,12 +1414,12 @@ my($graph) = GraphViz2 -&gt; new
 	node   =&gt; {shape =&gt; &#39;record&#39;},
 );
 
-$graph -&gt; add_node(name =&gt; &#39;struct1&#39;, label =&gt; &#39;&lt;f0&gt; left|&lt;f1&gt; mid dle|&lt;f2&gt; right&#39;);
+$graph -&gt; add_node(name =&gt; &#39;struct1::x&#39;, label =&gt; &#39;&lt;f0&gt; left|&lt;f1&gt; mid dle|&lt;f2&gt; right&#39;);
 $graph -&gt; add_node(name =&gt; &#39;struct2&#39;, label =&gt; &#39;&lt;f0&gt; one|&lt;f1&gt; two&#39;);
 $graph -&gt; add_node(name =&gt; &#39;struct3&#39;, label =&gt; &quot;hello\\nworld |{ b |{c|&lt;here&gt; d|e}| f}| g | h&quot;);
 
-$graph -&gt; add_edge(from =&gt; &#39;struct1:f1&#39;, to =&gt; &#39;struct2:f0&#39;,   color =&gt; &#39;blue&#39;);
-$graph -&gt; add_edge(from =&gt; &#39;struct1:f2&#39;, to =&gt; &#39;struct3:here&#39;, color =&gt; &#39;red&#39;);
+$graph -&gt; add_edge(from =&gt; &#39;struct1::x:f1&#39;, to =&gt; &#39;struct2:f0&#39;,   color =&gt; &#39;blue&#39;);
+$graph -&gt; add_edge(from =&gt; &#39;struct1::x:f2&#39;, to =&gt; &#39;struct3:here&#39;, color =&gt; &#39;red&#39;);
 
 if (@ARGV) {
   my($format)      = shift || &#39;svg&#39;;
@@ -2090,7 +2090,7 @@ Date
 <!-- Right -->
 <td>
 <div class="odd_right">
-2020-10-11
+2020-10-12
 </div>
 </td>
 </tr>

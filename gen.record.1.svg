@@ -10,9 +10,9 @@
 <title>Perl</title>
 <polygon fill="white" stroke="transparent" points="-4,4 -4,-170 416,-170 416,4 -4,4"/>
 <text text-anchor="middle" x="206" y="-7.8" font-family="Times,serif" font-size="14.00">Record demo 1 &#45; Nested records using strings as labels</text>
-<!-- struct1 -->
+<!-- struct1::x -->
 <g id="node1" class="node">
-<title>struct1</title>
+<title>struct1::x</title>
 <polygon fill="none" stroke="black" points="64.25,-129.5 64.25,-165.5 227.25,-165.5 227.25,-129.5 64.25,-129.5"/>
 <text text-anchor="middle" x="84.75" y="-143.8" font-family="Times,serif" font-size="14.00">left</text>
 <polyline fill="none" stroke="black" points="105.25,-129.5 105.25,-165.5 "/>
@@ -28,9 +28,9 @@
 <polyline fill="none" stroke="black" points="104.25,-40 104.25,-76 "/>
 <text text-anchor="middle" x="125.75" y="-54.3" font-family="Times,serif" font-size="14.00">two</text>
 </g>
-<!-- struct1&#45;&gt;struct2 -->
+<!-- struct1::x&#45;&gt;struct2 -->
 <g id="edge1" class="edge">
-<title>struct1:f1&#45;&gt;struct2:f0</title>
+<title>struct1::x:f1&#45;&gt;struct2:f0</title>
 <path fill="none" stroke="blue" d="M139.75,-129C139.75,-98.59 94.93,-108.19 84.78,-86.84"/>
 <polygon fill="blue" stroke="blue" points="88.2,-86.09 82.75,-77 81.34,-87.5 88.2,-86.09"/>
 </g>
@@ -55,9 +55,9 @@
 <polyline fill="none" stroke="black" points="323.75,-23.5 323.75,-92.5 "/>
 <text text-anchor="middle" x="336.75" y="-54.3" font-family="Times,serif" font-size="14.00">h</text>
 </g>
-<!-- struct1&#45;&gt;struct3 -->
+<!-- struct1::x&#45;&gt;struct3 -->
 <g id="edge2" class="edge">
-<title>struct1:f2&#45;&gt;struct3:here</title>
+<title>struct1::x:f2&#45;&gt;struct3:here</title>
 <path fill="none" stroke="red" d="M201.75,-129C201.75,-116.65 223.07,-93.17 239.86,-76.6"/>
 <polygon fill="red" stroke="red" points="242.41,-79.01 247.16,-69.54 237.54,-73.98 242.41,-79.01"/>
 </g>
