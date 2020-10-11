@@ -15,221 +15,2136 @@
 	<p>All scripts and input files required to generate these examples are available in the GraphViz2 repo.</p>
 
 <h3>Input file # 1 - t/gen.Heawood.t</h3>
-<p>
-Demonstrates the transitive 6-net, also known as Heawood&#39;s graph.<br />
-<object data = "gen.Heawood.svg"></object><br />
+<h4>Demonstrates the transitive 6-net, also known as Heawood&#39;s graph.</h4>
+<pre># Annotation: Demonstrates the transitive 6-net, also known as Heawood&#39;s graph.
+#
+# Reverse-engineered from graphs/directed/Heawood.gv from the Graphviz distro for V 2.26.3.
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+
+my($graph) = GraphViz2 -&gt; new
+	(
+	 global =&gt; {name =&gt; &#39;Heawood&#39;},
+	 graph  =&gt; {rankdir =&gt; &#39;TB&#39;},
+	);
+
+$graph -&gt; default_edge(color =&gt; &#39;black&#39;);
+$graph -&gt; default_node
+(
+ fontname =&gt; &quot;Arial&quot;,
+ label    =&gt; &quot;\\N&quot;,
+ shape    =&gt; &quot;circle&quot;,
+ width    =&gt; &quot;0.50000&quot;,
+ height   =&gt; &quot;0.500000&quot;,
+ color    =&gt; &quot;black&quot;,
+);
+
+for my $i (0 .. 12)
+{
+	$graph -&gt; add_edge(from =&gt; $i, to =&gt; ($i + 1) );
+}
+
+$graph -&gt; add_edge(from =&gt; 13, to =&gt;  0);
+$graph -&gt; add_edge(from =&gt;  0, to =&gt;  5, len =&gt; 2.5);
+$graph -&gt; add_edge(from =&gt;  2, to =&gt;  7, len =&gt; 2.5);
+$graph -&gt; add_edge(from =&gt;  4, to =&gt;  9, len =&gt; 2.5);
+$graph -&gt; add_edge(from =&gt;  6, to =&gt; 11, len =&gt; 2.5);
+$graph -&gt; add_edge(from =&gt;  8, to =&gt; 13, len =&gt; 2.5);
+$graph -&gt; add_edge(from =&gt; 10, to =&gt;  1, len =&gt; 2.5);
+$graph -&gt; add_edge(from =&gt; 12, to =&gt;  3, len =&gt; 2.5);
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec-&gt;catfile(&#39;html&#39;, &quot;Heawood.$format&quot;);
+  $graph-&gt;run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.Heawood.svg"></object>
+<br />
 Output file # 1 - gen.Heawood.svg
-</p>
 <h3>Input file # 2 - t/gen.anonymous.t</h3>
-<p>
-Demonstrates empty strings for node names and labels.<br />
-<object data = "gen.anonymous.svg"></object><br />
+<h4>Demonstrates empty strings for node names and labels.</h4>
+<pre># Annotation: Demonstrates empty strings for node names and labels.
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+
+my($graph) = GraphViz2 -&gt; new
+	(
+	 edge   =&gt; {color =&gt; &#39;grey&#39;},
+	 global =&gt; {directed =&gt; 1},
+	 graph  =&gt; {rankdir =&gt; &#39;TB&#39;},
+	 node   =&gt; {shape =&gt; &#39;oval&#39;},
+	);
+
+$graph -&gt; add_node(name =&gt; &#39;&#39;, label =&gt; &#39;&#39;); # Same as add_node().
+$graph -&gt; add_node(name =&gt; &#39;Anonymous label 1&#39;, label =&gt; &#39;&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Anonymous label 2&#39;, label =&gt; &#39;&#39;);
+$graph -&gt; add_edge(from =&gt; &#39;&#39;, to =&gt; &#39;&#39;); # This uses the name &#39;&#39;, and hence the first node.
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;anonymous.$format&quot;);
+  $graph-&gt;run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.anonymous.svg"></object>
+<br />
 Output file # 2 - gen.anonymous.svg
-</p>
 <h3>Input file # 3 - t/gen.circo.t</h3>
-<p>
-Demonstrates calling circo instead of dot.<br />
-<object data = "gen.circo.svg"></object><br />
+<h4>Demonstrates calling circo instead of dot.</h4>
+<pre># Annotation: Demonstrates calling circo instead of dot.
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+
+use IPC::Run3; # For run().
+
+# Generate the dot input.
+
+my($graph) = GraphViz2 -&gt; new
+(
+	edge   =&gt; {color =&gt; &#39;grey&#39;},
+	global =&gt; {directed =&gt; 1},
+	graph  =&gt; {rankdir =&gt; &#39;TB&#39;},
+	node   =&gt; {shape =&gt; &#39;oval&#39;},
+);
+
+# Redundant.
+#$graph -&gt; add_node(name =&gt; &#39;Here&#39;);
+#$graph -&gt; add_node(name =&gt; &#39;There&#39;);
+#$graph -&gt; add_node(name =&gt; &#39;Everywhere&#39;);
+
+$graph -&gt; add_edge(from =&gt; &#39;Here&#39;, to =&gt; &#39;There&#39;);
+$graph -&gt; add_edge(from =&gt; &#39;There&#39;, to =&gt; &#39;Everywhere&#39;);
+$graph -&gt; add_edge(from =&gt; &#39;Everywhere&#39;, to =&gt; &#39;Here&#39;);
+
+# Generate the dot output.
+
+$graph -&gt; run;
+
+# Generate the circo output.
+
+my($stdout, $stderr);
+
+run3
+	[
+		&#39;circo&#39;,
+		&#39;-Gpage=8.25,10.75&#39;,
+		&#39;-Grotate=90&#39;,
+		&#39;-Gmargin=0.125&#39;,
+		&#39;-Gsize=8.25,10.75&#39;
+	],
+	\$graph -&gt; dot_input,
+	\$stdout,
+	\$stderr;
+
+die $stderr if ($stderr);
+
+my($circo_output) = $stdout;
+
+#print &#39;-&#39; x 50, &quot;\n&quot;;
+#print $circo_output;
+#print &#39;-&#39; x 50, &quot;\n&quot;;
+
+# Generate the dot output.
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;circo.$format&quot;);
+
+  run3
+          [
+                  &#39;dot&#39;,
+                  &quot;-T$format&quot;,
+          ],
+          \$circo_output,
+          \$stdout,
+          \$stderr;
+
+  die $stderr if ($stderr);
+
+  my($dot_output) = $stdout;
+
+  #print &#39;-&#39; x 50, &quot;\n&quot;;
+  #print $dot_output;
+  #print &#39;-&#39; x 50, &quot;\n&quot;;
+
+  open(OUT, &#39;&gt;&#39;, $output_file);
+  print OUT $dot_output;
+  close OUT;
+
+  print &quot;Wrote $output_file. \n&quot;;
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.circo.svg"></object>
+<br />
 Output file # 3 - gen.circo.svg
-</p>
 <h3>Input file # 4 - t/gen.cluster.t</h3>
-<p>
-Demonstrates a cluster.<br />
-<object data = "gen.cluster.svg"></object><br />
+<h4>Demonstrates a cluster.</h4>
+<pre># Annotation: Demonstrates a cluster.
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+
+my($graph) = GraphViz2 -&gt; new
+	(
+	 edge   =&gt; {color =&gt; &#39;grey&#39;},
+	 global =&gt; {directed =&gt; 1},
+	 graph  =&gt; {clusterrank =&gt; &#39;local&#39;, compound =&gt; 1, rankdir =&gt; &#39;TB&#39;},
+	 node   =&gt; {shape =&gt; &#39;oval&#39;},
+	);
+
+$graph -&gt; push_subgraph(name =&gt; &#39;cluster_Europe&#39;, graph =&gt; {
+  bgcolor =&gt; &#39;grey&#39;, label =&gt; &#39;Europe&#39;
+});
+
+$graph -&gt; add_node(name =&gt; &#39;London&#39;, color =&gt; &#39;blue&#39;);
+$graph -&gt; add_node(
+  name =&gt; &#39;Paris&#39;, color =&gt; &#39;green&#39;, label =&gt; &#39;City of\nlurve&#39;,
+);
+
+$graph -&gt; add_edge(from =&gt; &#39;London&#39;, to =&gt; &#39;Paris&#39;);
+$graph -&gt; add_edge(from =&gt; &#39;Paris&#39;, to =&gt; &#39;London&#39;);
+
+$graph -&gt; pop_subgraph;
+
+$graph -&gt; add_node(name =&gt; &#39;New York&#39;, color =&gt; &#39;yellow&#39;);
+$graph -&gt; add_edge(from =&gt; &#39;London&#39;, to =&gt; &#39;New York&#39;, label =&gt; &#39;Far&#39;);
+
+$graph -&gt; push_subgraph(name =&gt; &#39;cluster_Australia&#39;, graph =&gt; {
+  bgcolor =&gt; &#39;grey&#39;, label =&gt; &#39;Australia&#39;,
+});
+
+$graph -&gt; add_node(name =&gt; &#39;Victoria&#39;, color =&gt; &#39;blue&#39;);
+$graph -&gt; add_node(name =&gt; &#39;New South Wales&#39;, color =&gt; &#39;green&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Tasmania&#39;, color =&gt; &#39;red&#39;);
+
+$graph -&gt; add_edge(from =&gt; &#39;Victoria&#39;, to =&gt; &#39;New South Wales&#39;);
+$graph -&gt; add_edge(from =&gt; &#39;Victoria&#39;, to =&gt; &#39;Tasmania&#39;);
+
+$graph -&gt; pop_subgraph;
+
+$graph -&gt; add_edge(
+  from =&gt; &#39;Victoria&#39;,
+  to =&gt; &#39;London&#39;,
+  ltail =&gt; &#39;cluster_Australia&#39;,
+  lhead =&gt; &#39;cluster_Europe&#39;,
+);
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;cluster.$format&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.cluster.svg"></object>
+<br />
 Output file # 4 - gen.cluster.svg
-</p>
 <h3>Input file # 5 - t/gen.html.labels.1.t</h3>
-<p>
-Demonstrates a HTML label without a table.<br />
-<object data = "gen.html.labels.1.svg"></object><br />
+<h4>Demonstrates a HTML label without a table.</h4>
+<pre># Annotation: Demonstrates a HTML label without a table.
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+
+my($id)    = 1;
+my($graph) = GraphViz2 -&gt; new
+(
+	edge   =&gt; {color =&gt; &#39;grey&#39;},
+	global =&gt; {directed =&gt; 1},
+	graph  =&gt; {
+	  label =&gt; &quot;HTML label demo # $id - Using \\&lt; ... \\&gt;&quot;, rankdir =&gt; &#39;TB&#39;
+        },
+	node   =&gt; {shape =&gt; &#39;oval&#39;},
+);
+
+$graph -&gt; default_node(shape     =&gt; &#39;circle&#39;, style =&gt; &#39;filled&#39;);
+$graph -&gt; default_edge(arrowsize =&gt; 4);
+
+$graph -&gt; add_node(name =&gt; &#39;Carnegie&#39;, shape =&gt; &#39;circle&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Carnegie&#39;, color =&gt; &#39;red&#39;);
+
+$graph -&gt; default_node(style =&gt; &#39;rounded&#39;);
+
+$graph -&gt; add_node(
+  name =&gt; &#39;Murrumbeena&#39;,
+  shape =&gt; &#39;doublecircle&#39;,
+  color =&gt; &#39;green&#39;,
+  label =&gt;
+    &#39;&lt;Murrumbeena&lt;br/&gt;&lt;font color=&quot;#0000ff&quot;&gt;Victoria&lt;/font&gt;&lt;br/&gt;Australia&gt;&#39;,
+);
+$graph -&gt; add_node(
+  name =&gt; &#39;Oakleigh&#39;,
+  shape =&gt; &#39;record&#39;,
+  color =&gt; &#39;blue&#39;,
+  label =&gt; [&#39;West Oakleigh&#39;, &#39;East Oakleigh&#39;],
+);
+
+$graph -&gt; add_edge(
+  from =&gt; &#39;Murrumbeena&#39;,
+  to =&gt; &#39;Carnegie&#39;,
+  arrowsize =&gt; 2,
+  label =&gt; &#39;&lt;Bike&lt;br/&gt;Train&lt;br/&gt;Stroll&gt;&#39;,
+);
+
+$graph -&gt; default_edge(arrowsize =&gt; 1);
+
+$graph -&gt; add_edge(
+  from =&gt; &#39;Murrumbeena&#39;,
+  to =&gt; &#39;Oakleigh:port1&#39;,
+  color =&gt; &#39;brown&#39;,
+  label =&gt; &#39;&lt;Meander&lt;br/&gt;Promenade&lt;br/&gt;Saunter&gt;&#39;,
+);
+$graph -&gt; add_edge(
+  from =&gt; &#39;Murrumbeena&#39;,
+  to =&gt; &#39;Oakleigh:port2&#39;,
+  color =&gt; &#39;green&#39;,
+  label =&gt; &#39;&lt;Drive&lt;br/&gt;Run&lt;br/&gt;Sprint&gt;&#39;,
+);
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;html.labels.$id.$format&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.html.labels.1.svg"></object>
+<br />
 Output file # 5 - gen.html.labels.1.svg
-</p>
 <h3>Input file # 6 - t/gen.html.labels.2.t</h3>
-<p>
-Demonstrates a HTML label with a table.<br />
-<object data = "gen.html.labels.2.svg"></object><br />
+<h4>Demonstrates a HTML label with a table.</h4>
+<pre># Annotation: Demonstrates a HTML label with a table.
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+
+my($id)    = 2;
+my($graph) = GraphViz2 -&gt; new
+(
+	edge   =&gt; {color =&gt; &#39;grey&#39;},
+	global =&gt; {directed =&gt; 1},
+	graph  =&gt; {
+          label =&gt; &quot;HTML label demo # $id - Using \\&lt;\\&lt;table\\&gt; ... &quot; .
+            &quot;\\&lt;/table\\&gt;\\&gt;&quot;,
+          rankdir =&gt; &#39;TB&#39;,
+        },
+	node   =&gt; {shape =&gt; &#39;oval&#39;},
+);
+
+$graph -&gt; add_node
+(
+	label =&gt;
+q|
+&lt;&lt;table bgcolor = &#39;white&#39;&gt;
+&lt;tr&gt;
+	&lt;td bgcolor = &#39;palegreen&#39;&gt;The green node is the start node&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+	&lt;td bgcolor = &#39;lightblue&#39;&gt;Lightblue nodes are for lexeme attributes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+	&lt;td bgcolor = &#39;orchid&#39;&gt;Orchid nodes are for lexemes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+	&lt;td bgcolor = &#39;goldenrod&#39;&gt;Golden nodes are for actions&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+	&lt;td bgcolor = &#39;firebrick1&#39;&gt;Red nodes are for events&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;&gt;
+|,
+	name  =&gt; &#39;Legend&#39;,
+	shape =&gt; &#39;plaintext&#39;,
+);
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;html.labels.$id.$format&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.html.labels.2.svg"></object>
+<br />
 Output file # 6 - gen.html.labels.2.svg
-</p>
 <h3>Input file # 7 - t/gen.html.labels.3.t</h3>
-<p>
-Demonstrates HTML labels with newlines and double-quotes.<br />
-<object data = "gen.html.labels.3.svg"></object><br />
+<h4>Demonstrates HTML labels with newlines and double-quotes.</h4>
+<pre># Annotation: Demonstrates HTML labels with newlines and double-quotes.
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+
+my($id)    = 3;
+my($graph) = GraphViz2 -&gt; new
+(
+	edge   =&gt; {color =&gt; &#39;grey&#39;},
+	global =&gt; {directed =&gt; 1},
+	graph  =&gt; {label =&gt; &quot;HTML label demo # $id - Fixing newlines&quot;, rankdir =&gt; &#39;TB&#39;},
+	node   =&gt; {shape =&gt; &#39;oval&#39;},
+);
+
+$graph -&gt; add_node(name =&gt; &#39;One&#39;, label =&gt; &#39;
+&lt;One&lt;br/&gt;&lt;font color=&quot;#0000ff&quot;&gt;Blue&lt;/font&gt;&lt;br/&gt;&gt;
+&#39;);
+
+$graph -&gt; add_node(name =&gt; &#39;Two&#39;, label =&gt; &#39;&lt;
+Two&lt;br/&gt;&lt;font color=&quot;#00ff00&quot;&gt;Green&lt;/font&gt;&lt;br/&gt;
+&gt;&#39;);
+
+$graph -&gt; add_node(name =&gt; &#39;Three&#39;, color =&gt; &#39;red&#39;, label =&gt; &#39;
+&lt;&lt;table border=&quot;1&quot;&gt;&lt;tr&gt;&lt;td align=&quot;left&quot;&gt;Three&lt;/td&gt;&lt;/tr&gt;&lt;tr align=&quot;right&quot;&gt;&lt;td&gt;Red&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&gt;
+&#39;);
+
+$graph -&gt; add_node(name =&gt; &#39;Four&#39;, color =&gt; &#39;magenta&#39;, label =&gt; &#39;&lt;
+&lt;table border=&quot;1&quot;&gt;&lt;tr&gt;&lt;td align=&quot;left&quot;&gt;Four&lt;br /&gt;magenta&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&gt;&#39;);
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;html.labels.$id.$format&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.html.labels.3.svg"></object>
+<br />
 Output file # 7 - gen.html.labels.3.svg
-</p>
 <h3>Input file # 8 - t/gen.jointed.edges.t</h3>
-<p>
-Demonstrates Y-shaped edges between 3 nodes.<br />
-<object data = "gen.jointed.edges.svg"></object><br />
+<h4>Demonstrates Y-shaped edges between 3 nodes.</h4>
+<pre># Annotation: Demonstrates Y-shaped edges between 3 nodes.
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+
+my($graph) = GraphViz2 -&gt; new
+	(
+	 edge   =&gt; {color =&gt; &#39;grey&#39;},
+	 global =&gt; {directed =&gt; 1},
+	 graph  =&gt; {rankdir =&gt; &#39;TB&#39;},
+	 node   =&gt; {shape =&gt; &#39;oval&#39;, style =&gt; &#39;filled&#39;},
+	);
+
+# Node set 1:
+
+$graph -&gt; add_node(name =&gt; &#39;Carnegie&#39;,    color =&gt; &#39;aquamarine&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Murrumbeena&#39;, color =&gt; &#39;bisque&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Oakleigh&#39;,    color =&gt; &#39;blueviolet&#39;);
+
+# This is the 1st of 2 nodes used as the junction of 3 edges.
+
+my(%junction) =
+(
+	color =&gt; &#39;grey&#39;,
+	shape =&gt; &#39;point&#39;,
+	width =&gt; 0,
+);
+
+$graph -&gt; add_node(name =&gt; &#39;one&#39;, %junction);
+
+# Note: arrowhead is case-sensitive (i.e. arrowHead does not work).
+# Presumably all attribute names are likewise case-sensitive.
+
+my(%headless_arrow) = (arrowhead =&gt; &#39;none&#39;);
+
+$graph -&gt; add_edge(from =&gt; &#39;Murrumbeena&#39;, to =&gt; &#39;one&#39;, %headless_arrow);
+$graph -&gt; add_edge(from =&gt; &#39;Carnegie&#39;,    to =&gt; &#39;one&#39;, %headless_arrow);
+$graph -&gt; add_edge(from =&gt; &#39;one&#39;,         to =&gt; &#39;Oakleigh&#39;);
+
+# Node set 2:
+
+$graph -&gt; add_node(name =&gt; &#39;Ashburton&#39;, color =&gt; &#39;lawngreen&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Chadstone&#39;, color =&gt; &#39;coral&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Waverley&#39;,  color =&gt; &#39;crimson&#39;);
+
+# This is the 2nd of 2 nodes used as the junction of 3 edges.
+
+$graph -&gt; add_node(name =&gt; &#39;two&#39;, %junction);
+
+$graph -&gt; add_edge(from =&gt; &#39;Ashburton&#39;, to =&gt; &#39;two&#39;, %headless_arrow);
+$graph -&gt; add_edge(from =&gt; &#39;Chadstone&#39;, to =&gt; &#39;two&#39;, %headless_arrow);
+$graph -&gt; add_edge(from =&gt; &#39;two&#39;,       to =&gt; &#39;Waverley&#39;);
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;jointed.edges.$format&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.jointed.edges.svg"></object>
+<br />
 Output file # 8 - gen.jointed.edges.svg
-</p>
 <h3>Input file # 9 - t/gen.macro.1.t</h3>
-<p>
-Demonstrates non-cluster subgraphs via a macro.<br />
-<object data = "gen.macro.1.svg"></object><br />
+<h4>Demonstrates non-cluster subgraphs via a macro.</h4>
+<pre># Annotation: Demonstrates non-cluster subgraphs via a macro.
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+
+sub macro
+{
+	my($graph, $name, $node_1, $node_2) = @_;
+
+	$graph -&gt; push_subgraph
+		(
+		 name  =&gt; $name,
+		 graph =&gt; {label =&gt; $name},
+		 node  =&gt; {color =&gt; &#39;magenta&#39;, shape =&gt; &#39;diamond&#39;},
+		);
+
+	$graph -&gt; add_node(name =&gt; $node_1, shape =&gt; &#39;hexagon&#39;);
+	$graph -&gt; add_node(name =&gt; $node_2, color =&gt; &#39;orange&#39;);
+
+	$graph -&gt; add_edge(from =&gt; $node_1, to =&gt; $node_2);
+
+	$graph -&gt; pop_subgraph;
+
+} # End of macro.
+
+my($id)    = &#39;1&#39;;
+my($graph) = GraphViz2 -&gt; new
+	(
+	 edge   =&gt; {color =&gt; &#39;grey&#39;},
+	 global =&gt; {directed =&gt; 1},
+	 graph  =&gt; {label =&gt; &quot;Macro demo $id - Non-cluster sub-graphs&quot;, rankdir =&gt; &#39;TB&#39;},
+	 node   =&gt; {shape =&gt; &#39;oval&#39;},
+	);
+
+macro($graph, &#39;One&#39;, &#39;Chadstone&#39;, &#39;Waverley&#39;);
+macro($graph, &#39;Two&#39;, &#39;Hughesdale&#39;, &#39;Notting Hill&#39;);
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;macro.$id.$format&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.macro.1.svg"></object>
+<br />
 Output file # 9 - gen.macro.1.svg
-</p>
 <h3>Input file # 10 - t/gen.macro.2.t</h3>
-<p>
-Demonstrates linked non-cluster subgraphs via a macro.<br />
-<object data = "gen.macro.2.svg"></object><br />
+<h4>Demonstrates linked non-cluster subgraphs via a macro.</h4>
+<pre># Annotation: Demonstrates linked non-cluster subgraphs via a macro.
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+
+sub macro
+{
+	my($graph, $name, $node_1, $node_2) = @_;
+
+	$graph -&gt; push_subgraph
+		(
+		 name  =&gt; $name,
+		 graph =&gt; {label =&gt; $name},
+		 node  =&gt; {color =&gt; &#39;magenta&#39;, shape =&gt; &#39;diamond&#39;},
+		);
+
+	$graph -&gt; add_node(name =&gt; $node_1, shape =&gt; &#39;hexagon&#39;);
+	$graph -&gt; add_node(name =&gt; $node_2, color =&gt; &#39;orange&#39;);
+
+	$graph -&gt; add_edge(from =&gt; $node_1, to =&gt; $node_2);
+
+	$graph -&gt; pop_subgraph;
+
+} # End of macro.
+
+my($id)    = &#39;2&#39;;
+my($graph) = GraphViz2 -&gt; new
+	(
+	 edge   =&gt; {color =&gt; &#39;grey&#39;},
+	 global =&gt; {directed =&gt; 1},
+	 graph  =&gt; {label =&gt; &quot;Macro demo $id - Linked non-cluster sub-graphs&quot;, rankdir =&gt; &#39;TB&#39;},
+	 node   =&gt; {shape =&gt; &#39;oval&#39;},
+	);
+
+macro($graph, &#39;One&#39;, &#39;Chadstone&#39;, &#39;Waverley&#39;);
+macro($graph, &#39;Two&#39;, &#39;Hughesdale&#39;, &#39;Notting Hill&#39;);
+
+$graph -&gt; add_edge(from =&gt; &#39;Chadstone&#39;, to =&gt; &#39;Notting Hill&#39;, minlen =&gt; 2);
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;macro.$id.$format&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.macro.2.svg"></object>
+<br />
 Output file # 10 - gen.macro.2.svg
-</p>
 <h3>Input file # 11 - t/gen.macro.3.t</h3>
-<p>
-Demonstrates cluster subgraphs via a macro.<br />
-<object data = "gen.macro.3.svg"></object><br />
+<h4>Demonstrates cluster subgraphs via a macro.</h4>
+<pre># Annotation: Demonstrates cluster subgraphs via a macro.
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+
+sub macro
+{
+	my($graph, $name, $node_1, $node_2) = @_;
+
+	$graph -&gt; push_subgraph
+		(
+		 name  =&gt; $name,
+		 graph =&gt; {label =&gt; $name},
+		 node  =&gt; {color =&gt; &#39;magenta&#39;, shape =&gt; &#39;diamond&#39;},
+		);
+
+	$graph -&gt; add_node(name =&gt; $node_1, shape =&gt; &#39;hexagon&#39;);
+	$graph -&gt; add_node(name =&gt; $node_2, color =&gt; &#39;orange&#39;);
+
+	$graph -&gt; add_edge(from =&gt; $node_1, to =&gt; $node_2);
+
+	$graph -&gt; pop_subgraph;
+
+} # End of macro.
+
+my($id)    = &#39;3&#39;;
+my($graph) = GraphViz2 -&gt; new
+	(
+	 edge   =&gt; {color =&gt; &#39;grey&#39;},
+	 global =&gt; {directed =&gt; 1},
+	 graph  =&gt; {label =&gt; &quot;Macro demo $id - Cluster sub-graphs&quot;, rankdir =&gt; &#39;TB&#39;},
+	 node   =&gt; {shape =&gt; &#39;oval&#39;},
+	);
+
+macro($graph, &#39;cluster 1&#39;, &#39;Chadstone&#39;, &#39;Waverley&#39;);
+macro($graph, &#39;cluster 2&#39;, &#39;Hughesdale&#39;, &#39;Notting Hill&#39;);
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;macro.$id.$format&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.macro.3.svg"></object>
+<br />
 Output file # 11 - gen.macro.3.svg
-</p>
 <h3>Input file # 12 - t/gen.macro.4.t</h3>
-<p>
-Demonstrates linked cluster subgraphs via a macro.<br />
-<object data = "gen.macro.4.svg"></object><br />
+<h4>Demonstrates linked cluster subgraphs via a macro.</h4>
+<pre># Annotation: Demonstrates linked cluster subgraphs via a macro.
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+
+sub macro
+{
+	my($graph, $name, $node_1, $node_2) = @_;
+
+	$graph -&gt; push_subgraph
+		(
+		 name  =&gt; $name,
+		 graph =&gt; {label =&gt; $name},
+		 node  =&gt; {color =&gt; &#39;magenta&#39;, shape =&gt; &#39;diamond&#39;},
+		);
+
+	$graph -&gt; add_node(name =&gt; $node_1, shape =&gt; &#39;hexagon&#39;);
+	$graph -&gt; add_node(name =&gt; $node_2, color =&gt; &#39;orange&#39;);
+
+	$graph -&gt; add_edge(from =&gt; $node_1, to =&gt; $node_2);
+
+	$graph -&gt; pop_subgraph;
+
+} # End of macro.
+
+# -----------------------------------------------
+
+my($id)    = &#39;4&#39;;
+my($graph) = GraphViz2 -&gt; new
+	(
+	 edge   =&gt; {color =&gt; &#39;grey&#39;},
+	 global =&gt; {directed =&gt; 1},
+	 graph  =&gt; {label =&gt; &quot;Macro demo $id - Linked cluster sub-graphs&quot;, rankdir =&gt; &#39;TB&#39;},
+	 node   =&gt; {shape =&gt; &#39;oval&#39;},
+	);
+
+macro($graph, &#39;cluster 1&#39;, &#39;Chadstone&#39;, &#39;Waverley&#39;);
+macro($graph, &#39;cluster 2&#39;, &#39;Hughesdale&#39;, &#39;Notting Hill&#39;);
+
+$graph -&gt; add_edge(from =&gt; &#39;Chadstone&#39;, to =&gt; &#39;Notting Hill&#39;, minlen =&gt; 2);
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;macro.$id.$format&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.macro.4.svg"></object>
+<br />
 Output file # 12 - gen.macro.4.svg
-</p>
 <h3>Input file # 13 - t/gen.macro.5.t</h3>
-<p>
-Demonstrates compound cluster subgraphs via a macro.<br />
-<object data = "gen.macro.5.svg"></object><br />
+<h4>Demonstrates compound cluster subgraphs via a macro.</h4>
+<pre># Annotation: Demonstrates compound cluster subgraphs via a macro.
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+
+sub macro
+{
+	my($graph, $name, $node_1, $node_2) = @_;
+
+	$graph -&gt; push_subgraph
+		(
+		 name  =&gt; $name,
+		 graph =&gt; {label =&gt; $name},
+		 node  =&gt; {color =&gt; &#39;magenta&#39;, shape =&gt; &#39;diamond&#39;},
+		);
+
+	$graph -&gt; add_node(name =&gt; $node_1, shape =&gt; &#39;hexagon&#39;);
+	$graph -&gt; add_node(name =&gt; $node_2, color =&gt; &#39;orange&#39;);
+
+	$graph -&gt; add_edge(from =&gt; $node_1, to =&gt; $node_2);
+
+	$graph -&gt; pop_subgraph;
+
+} # End of macro.
+
+# -----------------------------------------------
+
+my($id)    = &#39;5&#39;;
+my($graph) = GraphViz2 -&gt; new
+	(
+	 edge   =&gt; {color =&gt; &#39;grey&#39;},
+	 global =&gt; {directed =&gt; 1},
+	 graph  =&gt; {compound =&gt; &#39;true&#39;, label =&gt; &quot;Macro demo $id - Compound cluster sub-graphs&quot;, rankdir =&gt; &#39;TB&#39;},
+	 node   =&gt; {shape =&gt; &#39;oval&#39;},
+	);
+
+macro($graph, &#39;cluster 1&#39;, &#39;Chadstone&#39;, &#39;Waverley&#39;);
+macro($graph, &#39;cluster 2&#39;, &#39;Hughesdale&#39;, &#39;Notting Hill&#39;);
+
+$graph -&gt; add_edge(from =&gt; &#39;Chadstone&#39;, to =&gt; &#39;Notting Hill&#39;, lhead =&gt; &#39;cluster 2&#39;, ltail =&gt; &#39;cluster 1&#39;, minlen =&gt; 2);
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;macro.$id.$format&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.macro.5.svg"></object>
+<br />
 Output file # 13 - gen.macro.5.svg
-</p>
 <h3>Input file # 14 - t/gen.map.3.t</h3>
-<p>
-Demonstrates a graph with a &#39;plaintext&#39; shape.<br />
-<object data = "gen.map.3.svg"></object><br />
+<h4>Demonstrates a graph with a &#39;plaintext&#39; shape.</h4>
+<pre># Annotation: Demonstrates a graph with a &#39;plaintext&#39; shape.
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+
+my($id)		= 3;
+my $html_template = &lt;&lt;&#39;EOF&#39;;
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;Demo %1$s - A server-side image map&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;&lt;h1 align = &#39;center&#39;&gt;Demo %1$s - A server-side image map&lt;/h1&gt;&lt;/body&gt;
+&lt;/html&gt;
+EOF
+my $file_main = &quot;gen.map.$id.1.html&quot;;
+my $file_2 = &quot;gen.map.$id.2.html&quot;;
+my $file_3 = &quot;gen.map.$id.3.html&quot;;
+my($graph)	= GraphViz2 -&gt; new
+				(
+					edge   =&gt; {color =&gt; &#39;grey&#39;},
+					global =&gt;
+					{
+						directed	=&gt; 1,
+						name		=&gt; &#39;mainmap&#39;,
+					},
+					graph	=&gt; {rankdir =&gt; &#39;TB&#39;},
+					im_meta	=&gt;
+					{
+						URL =&gt; $file_main,	# Note: URL must be in caps.
+					},
+					node	=&gt; {shape =&gt; &#39;oval&#39;},
+				);
+
+$graph -&gt; add_node(name =&gt; &#39;source&#39;,	URL =&gt; $file_2);
+$graph -&gt; add_node(name =&gt; &#39;destination&#39;);
+$graph -&gt; add_edge(from =&gt; &#39;source&#39;,	to =&gt; &#39;destination&#39;,	URL =&gt; $file_3);
+
+if (@ARGV) {
+  my($format)			= shift || &#39;png&#39;;
+  my $output_file = shift || &quot;map.$id.$format&quot;;
+  (my $volume, my $dirname) = File::Spec-&gt;splitpath($output_file);
+  my($im_format)		= shift || &#39;imap&#39;;
+  my $im_output_file = shift || File::Spec-&gt;catpath($volume, $dirname, &quot;gen.map.$id.map&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file, im_format =&gt; $im_format, im_output_file =&gt; $im_output_file);
+  for ($file_main, $file_2, $file_3) {
+    open my $fh, &#39;&gt;&#39;, File::Spec-&gt;catpath($volume, $dirname, $_) or die &quot;$_: $!&quot;;
+    print $fh sprintf $html_template, $_;
+  }
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.map.3.svg"></object>
+<br />
 Output file # 14 - gen.map.3.svg
-</p>
 <h3>Input file # 15 - t/gen.map.4.t</h3>
-<p>
-Demonstrates a graph with a &#39;plaintext&#39; shape.<br />
-<object data = "gen.map.4.svg"></object><br />
+<h4>Demonstrates a graph with a &#39;plaintext&#39; shape.</h4>
+<pre># Annotation: Demonstrates a graph with a &#39;plaintext&#39; shape.
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+
+my($id)		= 4;
+my $html_template = &lt;&lt;&#39;EOF&#39;;
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;Demo %1$s - A server-side image map&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;&lt;h1 align = &#39;center&#39;&gt;Demo %1$s - A server-side image map&lt;/h1&gt;&lt;/body&gt;
+&lt;/html&gt;
+EOF
+my $file_main = &quot;gen.map.$id.1.html&quot;;
+my $file_2 = &quot;gen.map.$id.2.html&quot;;
+my $file_3 = &quot;gen.map.$id.3.html&quot;;
+my($graph)	= GraphViz2 -&gt; new
+				(
+					edge   =&gt; {color =&gt; &#39;grey&#39;},
+					global =&gt;
+					{
+						directed	=&gt; 1,
+						name		=&gt; &#39;mainmap&#39;,
+					},
+					graph	=&gt; {rankdir =&gt; &#39;TB&#39;},
+					im_meta	=&gt;
+					{
+						URL =&gt; $file_main,	# Note: URL must be in caps.
+					},
+					node	=&gt; {shape =&gt; &#39;oval&#39;},
+				);
+
+$graph -&gt; add_node(name =&gt; &#39;source&#39;,	URL =&gt; $file_2);
+$graph -&gt; add_node(name =&gt; &#39;destination&#39;);
+$graph -&gt; add_edge(from =&gt; &#39;source&#39;,	to =&gt; &#39;destination&#39;,	URL =&gt; $file_3);
+
+
+if (@ARGV) {
+  my($format)			= shift || &#39;svg&#39;;
+  my $output_file = shift || &quot;map.$id.$format&quot;;
+  my($im_format)		= shift || &#39;cmapx&#39;;
+  (my $volume, my $dirname) = File::Spec-&gt;splitpath($output_file);
+  my $im_output_file = shift || File::Spec-&gt;catpath($volume, $dirname, &quot;gen.map.$id.map&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file, im_format =&gt; $im_format, im_output_file =&gt; $im_output_file);
+  for ($file_main, $file_2, $file_3) {
+    open my $fh, &#39;&gt;&#39;, File::Spec-&gt;catpath($volume, $dirname, $_) or die &quot;$_: $!&quot;;
+    print $fh sprintf $html_template, $_;
+  }
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.map.4.svg"></object>
+<br />
 Output file # 15 - gen.map.4.svg
-</p>
 <h3>Input file # 16 - t/gen.parse.regexp.t</h3>
-<p>
-Demonstrates graphing a Perl regular expression.<br />
-<object data = "gen.parse.regexp.svg"></object><br />
+<h4>Demonstrates graphing a Perl regular expression.</h4>
+<pre># Annotation: Demonstrates graphing a Perl regular expression.
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+use GraphViz2::Parse::Regexp;
+
+my($graph)  = GraphViz2 -&gt; new
+	(
+	 edge   =&gt; {color =&gt; &#39;grey&#39;},
+	 global =&gt; {directed =&gt; 1},
+	 graph  =&gt; {rankdir =&gt; &#39;TB&#39;},
+	 node   =&gt; {color =&gt; &#39;blue&#39;, shape =&gt; &#39;oval&#39;},
+	);
+my($g) = GraphViz2::Parse::Regexp -&gt; new(graph =&gt; $graph);
+
+$g -&gt; create(regexp =&gt; &#39;(([abcd0-9])|(foo))&#39;);
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;parse.regexp.$format&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  local our $TODO = &#39;seems to vary by Perl version&#39;;
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.parse.regexp.svg"></object>
+<br />
 Output file # 16 - gen.parse.regexp.svg
-</p>
 <h3>Input file # 17 - t/gen.parse.stt.t</h3>
-<p>
-Demonstrates graphing a Set::FA::Element&#39;s state transition table.<br />
-<object data = "gen.parse.stt.svg"></object><br />
+<h4>Demonstrates graphing a Set::FA::Element&#39;s state transition table.</h4>
+<pre># Annotation: Demonstrates graphing a Set::FA::Element&#39;s state transition table.
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+use GraphViz2::Parse::STT;
+
+sub read_file {
+  open my $fh, &#39;&lt;:encoding(UTF-8)&#39;, $_[0] or die &quot;$_[0]: $!&quot;;
+  local $/;
+  &lt;$fh&gt;;
+}
+
+my($graph)  = GraphViz2 -&gt; new
+	(
+	 edge   =&gt; {color =&gt; &#39;grey&#39;},
+	 global =&gt; {directed =&gt; 1},
+	 graph  =&gt; {rankdir =&gt; &#39;LR&#39;},
+	 node   =&gt; {color =&gt; &#39;green&#39;, shape =&gt; &#39;oval&#39;},
+	);
+my($g)  = GraphViz2::Parse::STT -&gt; new(graph =&gt; $graph);
+my $stt = read_file(File::Spec -&gt; catfile(&#39;t&#39;, &#39;sample.stt.1.dat&#39;) );
+
+$g -&gt; create(stt =&gt; $stt);
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;parse.stt.$format&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.parse.stt.svg"></object>
+<br />
 Output file # 17 - gen.parse.stt.svg
-</p>
 <h3>Input file # 18 - t/gen.parse.yacc.t</h3>
-<p>
-Demonstrates graphing a byacc-style grammar.<br />
-<object data = "gen.parse.yacc.svg"></object><br />
+<h4>Demonstrates graphing a byacc-style grammar.</h4>
+<pre># Annotation: Demonstrates graphing a byacc-style grammar.
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+use GraphViz2::Parse::Yacc;
+
+my($graph)  = GraphViz2 -&gt; new
+	(
+	 edge   =&gt; {color =&gt; &#39;grey&#39;},
+	 global =&gt; {directed =&gt; 1},
+	 graph  =&gt; {concentrate =&gt; 1, rankdir =&gt; &#39;TB&#39;},
+	 node   =&gt; {color =&gt; &#39;blue&#39;, shape =&gt; &#39;oval&#39;},
+	);
+my($g) = GraphViz2::Parse::Yacc -&gt; new(graph =&gt; $graph);
+
+$g -&gt; create(file_name =&gt; File::Spec -&gt; catfile(&#39;t&#39;, &#39;calc3.output&#39;) );
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;parse.yacc.$format&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.parse.yacc.svg"></object>
+<br />
 Output file # 18 - gen.parse.yacc.svg
-</p>
 <h3>Input file # 19 - t/gen.parse.yapp.t</h3>
-<p>
-Demonstrates graphing a yapp-style grammar.<br />
-<object data = "gen.parse.yapp.svg"></object><br />
+<h4>Demonstrates graphing a yapp-style grammar.</h4>
+<pre># Annotation: Demonstrates graphing a yapp-style grammar.
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+use GraphViz2::Parse::Yapp;
+
+my($graph)  = GraphViz2 -&gt; new
+	(
+	 edge   =&gt; {color =&gt; &#39;grey&#39;},
+	 global =&gt; {directed =&gt; 1},
+	 graph  =&gt; {concentrate =&gt; 1, rankdir =&gt; &#39;TB&#39;},
+	 node   =&gt; {color =&gt; &#39;blue&#39;, shape =&gt; &#39;oval&#39;},
+	);
+my($g) = GraphViz2::Parse::Yapp -&gt; new(graph =&gt; $graph);
+
+$g -&gt; create(file_name =&gt; File::Spec -&gt; catfile(&#39;t&#39;, &#39;calc.output&#39;) );
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;parse.yapp.$format&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.parse.yapp.svg"></object>
+<br />
 Output file # 19 - gen.parse.yapp.svg
-</p>
 <h3>Input file # 20 - t/gen.plaintext.t</h3>
-<p>
-Demonstrates a graph with a &#39;plaintext&#39; shape.<br />
-<object data = "gen.plaintext.svg"></object><br />
+<h4>Demonstrates a graph with a &#39;plaintext&#39; shape.</h4>
+<pre># Annotation: Demonstrates a graph with a &#39;plaintext&#39; shape.
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+
+my($graph) = GraphViz2 -&gt; new
+	(
+	 edge   =&gt; {color =&gt; &#39;grey&#39;},
+	 global =&gt; {directed =&gt; 1},
+	 graph  =&gt; {rankdir =&gt; &#39;TB&#39;},
+	 node   =&gt; {shape =&gt; &#39;oval&#39;},
+	);
+
+$graph -&gt; add_node(name =&gt; &#39;Murrumbeena&#39;, shape =&gt; &#39;plaintext&#39;);
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;plaintext.$format&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.plaintext.svg"></object>
+<br />
 Output file # 20 - gen.plaintext.svg
-</p>
 <h3>Input file # 21 - t/gen.quote.t</h3>
-<p>
-Demonstrates (1) newlines and double-quotes in node names and labels, (2) justification.<br />
-<object data = "gen.quote.svg"></object><br />
+<h4>Demonstrates (1) newlines and double-quotes in node names and labels, (2) justification.</h4>
+<pre># Annotation: Demonstrates (1) newlines and double-quotes in node names and labels, (2) justification.
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+
+my($graph) = GraphViz2 -&gt; new
+	(
+	 edge   =&gt; {color =&gt; &#39;grey&#39;},
+	 global =&gt; {directed =&gt; 1},
+	 graph  =&gt; {rankdir =&gt; &#39;LR&#39;},
+	 node   =&gt; {shape =&gt; &#39;oval&#39;},
+	);
+
+$graph -&gt; add_node(name =&gt; &quot;Embedded\\nnewline\\nnode\\nname&quot;);
+$graph -&gt; add_node(name =&gt; &quot;Embedded newline label name&quot;, label =&gt; &quot;Embedded\\nnewline\\nlabel&quot;);
+$graph -&gt; add_node(name =&gt; &quot;Embedded\\ndouble-quote\\nnode\\nname\\n\\\&quot;&quot;);
+$graph -&gt; add_node(name =&gt; &quot;Embedded\\double-quote\\label&quot;, label =&gt; qq|Embedded\\ndouble-quote\\nlabel\\n\&quot;|);
+$graph -&gt; add_node(name =&gt; &#39;Line justification 1&#39;, label =&gt; &quot;A short line\\rA much longer line&quot;);
+$graph -&gt; add_node(name =&gt; &#39;Line justification 2&#39;, label =&gt; &quot;A much longer line\\rA short line&quot;);
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;quote.$format&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.quote.svg"></object>
+<br />
 Output file # 21 - gen.quote.svg
-</p>
 <h3>Input file # 22 - t/gen.rank.sub.graph.1.t</h3>
-<p>
-Demonstrates subgraphs used to rank nodes horizontally (succinct version of code).<br />
-<object data = "gen.rank.sub.graph.1.svg"></object><br />
+<h4>Demonstrates subgraphs used to rank nodes horizontally (succinct version of code).</h4>
+<pre># Annotation: Demonstrates subgraphs used to rank nodes horizontally (succinct version of code).
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+
+my($graph) = GraphViz2 -&gt; new
+(
+	edge     =&gt; {color =&gt; &#39;grey&#39;},
+	global   =&gt; {directed =&gt; 1},
+	graph    =&gt; {rankdir =&gt; &#39;TB&#39;},
+	node     =&gt; {shape =&gt; &#39;oval&#39;},
+	subgraph =&gt; {rank =&gt; &#39;same&#39;},
+);
+
+$graph -&gt; add_node(name =&gt; &#39;Carnegie&#39;,    shape =&gt; &#39;circle&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Chadstone&#39;,   shape =&gt; &#39;circle&#39;, color =&gt; &#39;red&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Malvern&#39;,     shape =&gt; &#39;box&#39;, color =&gt; &#39;green&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Murrumbeena&#39;, shape =&gt; &#39;doublecircle&#39;, color =&gt; &#39;orange&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Oakleigh&#39;,    color =&gt; &#39;blue&#39;);
+
+$graph -&gt; add_edge(from =&gt; &#39;Chadstone&#39;, to =&gt; &#39;Oakleigh&#39;, arrowhead =&gt; &#39;odot&#39;);
+$graph -&gt; add_edge(from =&gt; &#39;Malvern&#39;,   to =&gt; &#39;Carnegie&#39;, arrowsize =&gt; 2);
+$graph -&gt; add_edge(from =&gt; &#39;Malvern&#39;,   to =&gt; &#39;Oakleigh&#39;, color =&gt; &#39;brown&#39;);
+
+# a and b are arbitrary values. All that&#39;s happening is that all nodes
+# in @{$rank{a} } will be in the same horizontal line, and likewise for b.
+
+my(%rank) = (a =&gt; [], b =&gt; []);
+
+push @{$rank{a} }, &#39;Malvern&#39;;
+push @{$rank{a} }, &#39;Prahran&#39;;
+
+push @{$rank{b} }, &#39;Oakleigh&#39;;
+push @{$rank{b} }, &#39;Murrumbeena&#39;;
+
+for my $key (sort keys %rank)
+{
+	$graph -&gt; push_subgraph;
+	$graph -&gt; add_node(name =&gt; $_) for @{$rank{$key} };
+	$graph -&gt; pop_subgraph;
+}
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;rank.sub.graph.1.$format&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.rank.sub.graph.1.svg"></object>
+<br />
 Output file # 22 - gen.rank.sub.graph.1.svg
-</p>
 <h3>Input file # 23 - t/gen.rank.sub.graph.2.t</h3>
-<p>
-Demonstrates subgraphs used to rank nodes horizontally (long version).<br />
-<object data = "gen.rank.sub.graph.2.svg"></object><br />
+<h4>Demonstrates subgraphs used to rank nodes horizontally (long version).</h4>
+<pre># Annotation: Demonstrates subgraphs used to rank nodes horizontally (long version).
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+
+my($graph) = GraphViz2 -&gt; new
+(
+	edge   =&gt; {color =&gt; &#39;grey&#39;},
+	global =&gt; {directed =&gt; 1},
+	graph  =&gt; {rankdir =&gt; &#39;TB&#39;},
+	node   =&gt; {shape =&gt; &#39;oval&#39;},
+);
+
+$graph -&gt; add_node(name =&gt; &#39;Carnegie&#39;,    shape =&gt; &#39;circle&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Chadstone&#39;,   shape =&gt; &#39;circle&#39;, color =&gt; &#39;red&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Malvern&#39;,     shape =&gt; &#39;box&#39;, color =&gt; &#39;green&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Murrumbeena&#39;, shape =&gt; &#39;doublecircle&#39;, color =&gt; &#39;orange&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Oakleigh&#39;,    color =&gt; &#39;blue&#39;);
+
+$graph -&gt; add_edge(from =&gt; &#39;Chadstone&#39;, to =&gt; &#39;Oakleigh&#39;, arrowhead =&gt; &#39;odot&#39;);
+$graph -&gt; add_edge(from =&gt; &#39;Malvern&#39;,   to =&gt; &#39;Carnegie&#39;, arrowsize =&gt; 2);
+$graph -&gt; add_edge(from =&gt; &#39;Malvern&#39;,   to =&gt; &#39;Oakleigh&#39;, color =&gt; &#39;brown&#39;);
+
+$graph -&gt; push_subgraph
+(
+	subgraph =&gt; {rank =&gt; &#39;same&#39;},
+);
+
+$graph -&gt; add_node(name =&gt; &#39;Malvern&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Prahran&#39;);
+
+$graph -&gt; pop_subgraph;
+
+$graph -&gt; push_subgraph
+(
+	subgraph =&gt; {rank =&gt; &#39;same&#39;},
+);
+
+$graph -&gt; add_node(name =&gt; &#39;Oakleigh&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Murrumbeena&#39;);
+
+$graph -&gt; pop_subgraph;
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;rank.sub.graph.2.$format&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.rank.sub.graph.2.svg"></object>
+<br />
 Output file # 23 - gen.rank.sub.graph.2.svg
-</p>
 <h3>Input file # 24 - t/gen.rank.sub.graph.3.t</h3>
-<p>
-Demonstrates subgraph name effects (non-cluster version).<br />
-<object data = "gen.rank.sub.graph.3.svg"></object><br />
+<h4>Demonstrates subgraph name effects (non-cluster version).</h4>
+<pre># Annotation: Demonstrates subgraph name effects (non-cluster version).
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+
+my($graph) = GraphViz2 -&gt; new
+(
+	edge   =&gt; {color =&gt; &#39;grey&#39;},
+	global =&gt; {directed =&gt; 1},
+	graph  =&gt; {rankdir =&gt; &#39;TB&#39;},
+	node   =&gt; {shape =&gt; &#39;oval&#39;},
+);
+
+$graph -&gt; add_node(name =&gt; &#39;Carnegie&#39;,    shape =&gt; &#39;circle&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Chadstone&#39;,   shape =&gt; &#39;circle&#39;, color =&gt; &#39;red&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Malvern&#39;,     shape =&gt; &#39;box&#39;, color =&gt; &#39;green&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Murrumbeena&#39;, shape =&gt; &#39;doublecircle&#39;, color =&gt; &#39;orange&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Oakleigh&#39;,    color =&gt; &#39;blue&#39;);
+
+$graph -&gt; add_edge(from =&gt; &#39;Chadstone&#39;, to =&gt; &#39;Oakleigh&#39;, arrowhead =&gt; &#39;odot&#39;);
+$graph -&gt; add_edge(from =&gt; &#39;Malvern&#39;,   to =&gt; &#39;Carnegie&#39;, arrowsize =&gt; 2);
+$graph -&gt; add_edge(from =&gt; &#39;Malvern&#39;,   to =&gt; &#39;Oakleigh&#39;, color =&gt; &#39;brown&#39;);
+
+$graph -&gt; push_subgraph
+(
+	subgraph =&gt; {rank =&gt; &#39;same&#39;},
+);
+
+$graph -&gt; add_node(name =&gt; &#39;Malvern&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Prahran&#39;);
+
+$graph -&gt; pop_subgraph;
+
+$graph -&gt; push_subgraph
+(
+	name     =&gt; &#39;Subgraph 2&#39;,
+	subgraph =&gt; {rank =&gt; &#39;same&#39;},
+);
+
+$graph -&gt; add_node(name =&gt; &#39;Oakleigh&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Murrumbeena&#39;);
+
+$graph -&gt; pop_subgraph;
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;rank.sub.graph.3.$format&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.rank.sub.graph.3.svg"></object>
+<br />
 Output file # 24 - gen.rank.sub.graph.3.svg
-</p>
 <h3>Input file # 25 - t/gen.rank.sub.graph.4.t</h3>
-<p>
-Demonstrates subgraph name effects (cluster version).<br />
-<object data = "gen.rank.sub.graph.4.svg"></object><br />
+<h4>Demonstrates subgraph name effects (cluster version).</h4>
+<pre># Annotation: Demonstrates subgraph name effects (cluster version).
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+
+my($graph) = GraphViz2 -&gt; new
+(
+	edge   =&gt; {color =&gt; &#39;grey&#39;},
+	global =&gt; {directed =&gt; 1},
+	graph  =&gt; {rankdir =&gt; &#39;TB&#39;},
+	node   =&gt; {shape =&gt; &#39;oval&#39;},
+);
+
+$graph -&gt; add_node(name =&gt; &#39;Carnegie&#39;,    shape =&gt; &#39;circle&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Chadstone&#39;,   shape =&gt; &#39;circle&#39;, color =&gt; &#39;red&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Malvern&#39;,     shape =&gt; &#39;box&#39;, color =&gt; &#39;green&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Murrumbeena&#39;, shape =&gt; &#39;doublecircle&#39;, color =&gt; &#39;orange&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Oakleigh&#39;,    color =&gt; &#39;blue&#39;);
+
+$graph -&gt; add_edge(from =&gt; &#39;Chadstone&#39;, to =&gt; &#39;Oakleigh&#39;, arrowhead =&gt; &#39;odot&#39;);
+$graph -&gt; add_edge(from =&gt; &#39;Malvern&#39;,   to =&gt; &#39;Carnegie&#39;, arrowsize =&gt; 2);
+$graph -&gt; add_edge(from =&gt; &#39;Malvern&#39;,   to =&gt; &#39;Oakleigh&#39;, color =&gt; &#39;brown&#39;);
+
+$graph -&gt; push_subgraph
+(
+	subgraph =&gt; {rank =&gt; &#39;same&#39;},
+);
+
+$graph -&gt; add_node(name =&gt; &#39;Malvern&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Prahran&#39;);
+
+$graph -&gt; pop_subgraph;
+
+$graph -&gt; push_subgraph
+(
+	name     =&gt; &#39;cluster Subgraph 2&#39;,
+	subgraph =&gt; {rank =&gt; &#39;same&#39;},
+);
+
+$graph -&gt; add_node(name =&gt; &#39;Oakleigh&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Murrumbeena&#39;);
+
+$graph -&gt; pop_subgraph;
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;rank.sub.graph.4.$format&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.rank.sub.graph.4.svg"></object>
+<br />
 Output file # 25 - gen.rank.sub.graph.4.svg
-</p>
 <h3>Input file # 26 - t/gen.record.1.t</h3>
-<p>
-Nested records using strings as labels.<br />
-<object data = "gen.record.1.svg"></object><br />
+<h4>Nested records using strings as labels.</h4>
+<pre># Annotation: Nested records using strings as labels.
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+
+my($id)    = &#39;1&#39;;
+my($graph) = GraphViz2 -&gt; new
+(
+	edge   =&gt; {color =&gt; &#39;grey&#39;},
+	global =&gt; {directed =&gt; 1},
+	graph  =&gt; {label =&gt; &quot;Record demo $id - Nested records using strings as labels&quot;},
+	node   =&gt; {shape =&gt; &#39;record&#39;},
+);
+
+$graph -&gt; add_node(name =&gt; &#39;struct1&#39;, label =&gt; &#39;&lt;f0&gt; left|&lt;f1&gt; mid dle|&lt;f2&gt; right&#39;);
+$graph -&gt; add_node(name =&gt; &#39;struct2&#39;, label =&gt; &#39;&lt;f0&gt; one|&lt;f1&gt; two&#39;);
+$graph -&gt; add_node(name =&gt; &#39;struct3&#39;, label =&gt; &quot;hello\\nworld |{ b |{c|&lt;here&gt; d|e}| f}| g | h&quot;);
+
+$graph -&gt; add_edge(from =&gt; &#39;struct1:f1&#39;, to =&gt; &#39;struct2:f0&#39;,   color =&gt; &#39;blue&#39;);
+$graph -&gt; add_edge(from =&gt; &#39;struct1:f2&#39;, to =&gt; &#39;struct3:here&#39;, color =&gt; &#39;red&#39;);
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;record.$id.$format&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.record.1.svg"></object>
+<br />
 Output file # 26 - gen.record.1.svg
-</p>
 <h3>Input file # 27 - t/gen.record.2.t</h3>
-<p>
-Nested records using an arrayref of hashrefs as labels.<br />
-<object data = "gen.record.2.svg"></object><br />
+<h4>Nested records using an arrayref of hashrefs as labels.</h4>
+<pre># Annotation: Nested records using an arrayref of hashrefs as labels.
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+
+my($id)    = &#39;2&#39;;
+my($graph) = GraphViz2 -&gt; new
+(
+	edge   =&gt; {color =&gt; &#39;grey&#39;},
+	global =&gt; {directed =&gt; 1},
+	graph  =&gt; {label =&gt; &quot;Record demo $id - Nested records using an arrayref of hashrefs as labels&quot;},
+	node   =&gt; {shape =&gt; &#39;record&#39;},
+);
+
+$graph -&gt; add_node(name =&gt; &#39;struct1&#39;, label =&gt; &#39;&lt;f0&gt; left|&lt;f1&gt; mid dle|&lt;f2&gt; right&#39;);
+$graph -&gt; add_node(name =&gt; &#39;struct2&#39;, label =&gt; &#39;&lt;f0&gt; one|&lt;f1&gt; two&#39;);
+$graph -&gt; add_node(name =&gt; &#39;struct3&#39;, label =&gt;
+[
+	{
+		text =&gt; &quot;hello\\nworld&quot;,
+	},
+	{
+		text =&gt; &#39;{b&#39;,
+	},
+	{
+		text =&gt; &#39;{c&#39;,
+	},
+	{
+		port =&gt; &#39;&lt;here&gt;&#39;,
+		text =&gt; &#39;d&#39;,
+	},
+	{
+		text =&gt; &#39;e}&#39;,
+	},
+	{
+		text =&gt; &#39;f}&#39;,
+	},
+	{
+		text =&gt; &#39;g&#39;,
+	},
+	{
+		text =&gt; &#39;h&#39;,
+	},
+]);
+
+$graph -&gt; add_edge(from =&gt; &#39;struct1:f1&#39;, to =&gt; &#39;struct2:f0&#39;,   color =&gt; &#39;blue&#39;);
+$graph -&gt; add_edge(from =&gt; &#39;struct1:f2&#39;, to =&gt; &#39;struct3:here&#39;, color =&gt; &#39;red&#39;);
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;record.$id.$format&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.record.2.svg"></object>
+<br />
 Output file # 27 - gen.record.2.svg
-</p>
 <h3>Input file # 28 - t/gen.record.3.t</h3>
-<p>
-Deeply nested records using strings as labels.<br />
-<object data = "gen.record.3.svg"></object><br />
+<h4>Deeply nested records using strings as labels.</h4>
+<pre># Annotation: Deeply nested records using strings as labels.
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+
+my($id)    = &#39;3&#39;;
+my($graph) = GraphViz2 -&gt; new
+(
+	edge   =&gt; {color =&gt; &#39;grey&#39;},
+	global =&gt; {directed =&gt; 1},
+	graph  =&gt; {
+          label =&gt; &quot;Record demo $id - Deeply nested records &quot; .
+            &quot;using strings as labels&quot;
+        },
+	node   =&gt; {shape =&gt; &#39;record&#39;},
+);
+
+$graph -&gt; add_node(name =&gt; &#39;Alphabet&#39;,
+label =&gt; join(&#39;|&#39;,
+  &#39;&lt;port_a&gt; a:port_a &#39;,
+  &#39;{&lt;port_b&gt; b:port_b &#39;,
+  &#39; c &#39;,
+  &#39;{&lt;port_d&gt; d:port_d &#39;,
+  &#39; e &#39;,
+  &#39; f &#39;,
+  &#39;{ g &#39;,
+  &#39;&lt;port_h&gt; h:port_h &#39;,
+  &#39; i &#39;,
+  &#39; j &#39;,
+  &#39;{ k &#39;,
+  &#39; l &#39;,
+  &#39; m &#39;,
+  &#39;&lt;port_n&gt; n:port_n &#39;,
+  &#39; o &#39;,
+  &#39; p}&#39;,
+  &#39; q &#39;,
+  &#39; r &#39;,
+  &#39;&lt;port_s&gt; s:port_s &#39;,
+  &#39; t }&#39;,
+  &#39; u &#39;,
+  &#39; v &#39;,
+  &#39;&lt;port_w&gt; w:port_w }&#39;,
+  &#39; x &#39;,
+  &#39;&lt;port_y&gt; y:port_y }&#39;,
+  &#39; z&#39;,
+));
+
+$graph -&gt; add_edge(
+  from =&gt; &#39;Alphabet:port_a&#39;, to =&gt; &#39;Alphabet:port_n&#39;, color =&gt; &#39;maroon&#39;,
+);
+$graph -&gt; add_edge(
+  from =&gt; &#39;Alphabet:port_b&#39;, to =&gt; &#39;Alphabet:port_s&#39;, color =&gt; &#39;blue&#39;,
+);
+$graph -&gt; add_edge(
+  from =&gt; &#39;Alphabet:port_d&#39;, to =&gt; &#39;Alphabet:port_w&#39;, color =&gt; &#39;red&#39;,
+);
+$graph -&gt; add_edge(
+  from =&gt; &#39;Alphabet:port_y&#39;, to =&gt; &#39;Alphabet:port_h&#39;, color =&gt; &#39;green&#39;,
+);
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;record.$id.$format&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.record.3.svg"></object>
+<br />
 Output file # 28 - gen.record.3.svg
-</p>
 <h3>Input file # 29 - t/gen.record.4.t</h3>
-<p>
-Set record-style node labels and shapes in various ways.<br />
-<object data = "gen.record.4.svg"></object><br />
+<h4>Set record-style node labels and shapes in various ways.</h4>
+<pre># Annotation: Set record-style node labels and shapes in various ways.
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+
+my($id)    = &#39;4&#39;;
+my($graph) = GraphViz2 -&gt; new
+(
+	edge   =&gt; {color =&gt; &#39;grey&#39;},
+	global =&gt; {directed =&gt; 1},
+	graph  =&gt; {label =&gt; &quot;Record demo $id - Set record shapes in various ways&quot;},
+	node   =&gt; {color =&gt; &#39;magenta&#39;, shape =&gt; &#39;oval&#39;},
+);
+
+$graph -&gt; add_node(name =&gt; &#39;One&#39;,   label =&gt; []);
+$graph -&gt; add_node(name =&gt; &#39;Two&#39;,   label =&gt; [&#39;Left&#39;, &#39;Right&#39;]);
+$graph -&gt; add_node(name =&gt; &#39;Three&#39;, color =&gt; &#39;black&#39;, label =&gt; [&#39;Good&#39;, &#39;Bad&#39;], shape =&gt; &#39;record&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Four&#39;,  label =&gt;
+[
+	{
+		text =&gt; &#39;{Big&#39;,
+	},
+	{
+		text =&gt; &#39;Small}&#39;,
+	},
+]);
+$graph -&gt; add_node(name =&gt; &#39;Five&#39;, label =&gt;
+[
+	{
+		text =&gt; &#39;{Yin&#39;,
+	},
+	{
+		text =&gt; &#39;Yang}&#39;,
+	},
+], shape =&gt; &#39;record&#39;);
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;record.$id.$format&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.record.4.svg"></object>
+<br />
 Output file # 29 - gen.record.4.svg
-</p>
 <h3>Input file # 30 - t/gen.sub.graph.t</h3>
-<p>
-Demonstrates a subgraph (with a frame because the subgroup is called cluster_*).<br />
-<object data = "gen.sub.graph.svg"></object><br />
+<h4>Demonstrates a subgraph (with a frame because the subgroup is called cluster_*).</h4>
+<pre># Annotation: Demonstrates a subgraph (with a frame because the subgroup is called cluster_*).
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+
+my($graph) = GraphViz2 -&gt; new
+	(
+	 edge   =&gt; {color =&gt; &#39;grey&#39;},
+	 global =&gt; {directed =&gt; 1},
+	 graph  =&gt; {label =&gt; &#39;sub.graph.pl&#39;, rankdir =&gt; &#39;TB&#39;},
+	 node   =&gt; {shape =&gt; &#39;oval&#39;},
+	);
+
+$graph -&gt; add_node(name =&gt; &#39;Carnegie&#39;, shape =&gt; &#39;circle&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Murrumbeena&#39;, shape =&gt; &#39;doublecircle&#39;, color =&gt; &#39;green&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Oakleigh&#39;,    color =&gt; &#39;blue&#39;);
+
+$graph -&gt; add_edge(from =&gt; &#39;Murrumbeena&#39;, to    =&gt; &#39;Carnegie&#39;, arrowsize =&gt; 2);
+$graph -&gt; add_edge(from =&gt; &#39;Murrumbeena&#39;, to    =&gt; &#39;Oakleigh&#39;, color =&gt; &#39;brown&#39;);
+
+$graph -&gt; push_subgraph
+(
+ name  =&gt; &#39;cluster_1&#39;,
+ graph =&gt; {label =&gt; &#39;Child&#39;},
+ node  =&gt; {color =&gt; &#39;magenta&#39;, shape =&gt; &#39;diamond&#39;},
+);
+
+$graph -&gt; add_node(name =&gt; &#39;Chadstone&#39;, shape =&gt; &#39;hexagon&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Waverley&#39;, color =&gt; &#39;orange&#39;);
+
+$graph -&gt; add_edge(from =&gt; &#39;Chadstone&#39;, to =&gt; &#39;Waverley&#39;);
+
+$graph -&gt; pop_subgraph;
+
+$graph -&gt; default_node(color =&gt; &#39;cyan&#39;);
+
+$graph -&gt; add_node(name =&gt; &#39;Malvern&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Prahran&#39;, shape =&gt; &#39;trapezium&#39;);
+
+$graph -&gt; add_edge(from =&gt; &#39;Malvern&#39;, to =&gt; &#39;Prahran&#39;);
+$graph -&gt; add_edge(from =&gt; &#39;Malvern&#39;, to =&gt; &#39;Murrumbeena&#39;);
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;sub.graph.$format&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.sub.graph.svg"></object>
+<br />
 Output file # 30 - gen.sub.graph.svg
-</p>
 <h3>Input file # 31 - t/gen.sub.graph.frames.t</h3>
-<p>
-Demonstrates clusters with and without frames.<br />
-<object data = "gen.sub.graph.frames.svg"></object><br />
+<h4>Demonstrates clusters with and without frames.</h4>
+<pre># Annotation: Demonstrates clusters with and without frames.
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+
+my($graph) = GraphViz2 -&gt; new
+	(
+	 edge   =&gt; {color =&gt; &#39;grey&#39;},
+	 global =&gt; {directed =&gt; 1},
+	 graph  =&gt; {label =&gt; &#39;Demo of 3 subgraphs (2 being clusters), and 1 frame&#39;, rankdir =&gt; &#39;TB&#39;},
+	 node   =&gt; {shape =&gt; &#39;oval&#39;},
+	);
+
+$graph -&gt; add_node(name =&gt; &#39;One&#39;, color =&gt; &#39;red&#39;,   shape =&gt; &#39;circle&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Two&#39;, color =&gt; &#39;green&#39;, shape =&gt; &#39;doublecircle&#39;);
+
+$graph -&gt; add_edge(from =&gt; &#39;One&#39;, to =&gt; &#39;Two&#39;, color =&gt; &#39;maroon&#39;, penwidth =&gt; 3);
+
+$graph -&gt; push_subgraph
+(
+	graph    =&gt; {label =&gt; &#39;Child the First&#39;},
+	name     =&gt; &#39;cluster First subgraph&#39;,
+	node     =&gt; {color =&gt; &#39;magenta&#39;, shape =&gt; &#39;diamond&#39;},
+	subgraph =&gt; {pencolor =&gt; &#39;white&#39;}, # Required because name =~ /^cluster/.
+);
+
+$graph -&gt; add_node(name =&gt; &#39;Three&#39;); # Default color and shape.
+$graph -&gt; add_node(name =&gt; &#39;Four&#39;,  color =&gt; &#39;orange&#39;, shape =&gt; &#39;rectangle&#39;);
+
+$graph -&gt; add_edge(from =&gt; &#39;Three&#39;, to =&gt; &#39;Four&#39;, penwidth =&gt; 3);
+
+$graph -&gt; pop_subgraph;
+
+$graph -&gt; push_subgraph
+(
+	graph    =&gt; {label =&gt; &#39;Child the Second&#39;},
+	name     =&gt; &#39;cluster Second subgraph&#39;,
+	node     =&gt; {color =&gt; &#39;magenta&#39;, shape =&gt; &#39;diamond&#39;},
+	subgraph =&gt; {pencolor =&gt; &#39;purple&#39;}, # Required because name =~ /^cluster/.
+);
+
+$graph -&gt; add_node(name =&gt; &#39;Five&#39;, color =&gt; &#39;blue&#39;); # Default shape.
+$graph -&gt; add_node(name =&gt; &#39;Six&#39;,  color =&gt; &#39;orange&#39;, shape =&gt; &#39;rectangle&#39;);
+
+$graph -&gt; add_edge(from =&gt; &#39;Five&#39;, to =&gt; &#39;Six&#39;, penwidth =&gt; 3);
+
+$graph -&gt; pop_subgraph;
+
+$graph -&gt; push_subgraph
+(
+	name     =&gt; &#39;Third subgraph&#39;,
+	graph    =&gt; {label =&gt; &#39;Child the Third&#39;},
+	node     =&gt; {color =&gt; &#39;magenta&#39;, shape =&gt; &#39;diamond&#39;},
+);
+
+$graph -&gt; add_node(name =&gt; &#39;Seven&#39;, color =&gt; &#39;blue&#39;,   shape =&gt; &#39;doubleoctagon&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Eight&#39;, color =&gt; &#39;orange&#39;, shape =&gt; &#39;rectangle&#39;);
+
+$graph -&gt; add_edge(from =&gt; &#39;Seven&#39;, to =&gt; &#39;Eight&#39;, penwidth =&gt; 3);
+
+$graph -&gt; pop_subgraph;
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;sub.graph.frames.$format&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.sub.graph.frames.svg"></object>
+<br />
 Output file # 31 - gen.sub.graph.frames.svg
-</p>
 <h3>Input file # 32 - t/gen.sub.sub.graph.t</h3>
-<p>
-Demonstrates a subsubgraph.<br />
-<object data = "gen.sub.sub.graph.svg"></object><br />
+<h4>Demonstrates a subsubgraph.</h4>
+<pre># Annotation: Demonstrates a subsubgraph.
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+
+my($graph) = GraphViz2 -&gt; new
+	(
+	 edge   =&gt; {color =&gt; &#39;grey&#39;},
+	 global =&gt; {directed =&gt; 1},
+	 graph  =&gt; {label =&gt; &#39;sub.sub.graph.pl&#39;, rankdir =&gt; &#39;TB&#39;},
+	 node   =&gt; {shape =&gt; &#39;oval&#39;},
+	);
+
+$graph -&gt; add_node(name =&gt; &#39;Carnegie&#39;, shape =&gt; &#39;circle&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Murrumbeena&#39;, shape =&gt; &#39;doublecircle&#39;, color =&gt; &#39;green&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Oakleigh&#39;,    color =&gt; &#39;blue&#39;);
+$graph -&gt; add_edge(from =&gt; &#39;Murrumbeena&#39;, to    =&gt; &#39;Carnegie&#39;, arrowsize =&gt; 2);
+$graph -&gt; add_edge(from =&gt; &#39;Murrumbeena&#39;, to    =&gt; &#39;Oakleigh&#39;, color =&gt; &#39;brown&#39;);
+
+$graph -&gt; push_subgraph
+(
+ name  =&gt; &#39;subgraph_1&#39;,
+ graph =&gt; {label =&gt; &#39;Child&#39;},
+ node  =&gt; {color =&gt; &#39;magenta&#39;, shape =&gt; &#39;diamond&#39;},
+);
+
+$graph -&gt; add_node(name =&gt; &#39;Chadstone&#39;, shape =&gt; &#39;hexagon&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Waverley&#39;, color =&gt; &#39;orange&#39;);
+$graph -&gt; add_edge(from =&gt; &#39;Chadstone&#39;, to =&gt; &#39;Waverley&#39;);
+
+$graph -&gt; push_subgraph
+(
+ name  =&gt; &#39;cluster_2&#39;,
+ graph =&gt; {label =&gt; &#39;Grandchild&#39;},
+ node  =&gt; {color =&gt; &#39;blue3&#39;, shape =&gt; &#39;triangle&#39;},
+);
+
+$graph -&gt; add_node(name =&gt; &#39;Glen Waverley&#39;, shape =&gt; &#39;pentagon&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Mount Waverley&#39;, color =&gt; &#39;darkslategrey&#39;);
+$graph -&gt; add_edge(from =&gt; &#39;Glen Waverley&#39;, to =&gt; &#39;Mount Waverley&#39;);
+
+$graph -&gt; pop_subgraph;
+$graph -&gt; pop_subgraph;
+
+$graph -&gt; default_node(color =&gt; &#39;cyan&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Malvern&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Prahran&#39;, shape =&gt; &#39;trapezium&#39;);
+$graph -&gt; add_edge(from =&gt; &#39;Malvern&#39;, to =&gt; &#39;Prahran&#39;);
+$graph -&gt; add_edge(from =&gt; &#39;Malvern&#39;, to =&gt; &#39;Murrumbeena&#39;);
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;sub.sub.graph.$format&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.sub.sub.graph.svg"></object>
+<br />
 Output file # 32 - gen.sub.sub.graph.svg
-</p>
 <h3>Input file # 33 - t/gen.trivial.t</h3>
-<p>
-Demonstrates a trivial 3-node graph, with colors.<br />
-<object data = "gen.trivial.svg"></object><br />
+<h4>Demonstrates a trivial 3-node graph, with colors.</h4>
+<pre># Annotation: Demonstrates a trivial 3-node graph, with colors.
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+
+my($graph) = GraphViz2 -&gt; new
+	(
+	 edge   =&gt; {color =&gt; &#39;grey&#39;},
+	 global =&gt; {directed =&gt; 1},
+	 graph  =&gt; {rankdir =&gt; &#39;TB&#39;},
+	 node   =&gt; {shape =&gt; &#39;oval&#39;},
+	);
+
+$graph -&gt; default_node(shape     =&gt; &#39;circle&#39;, style =&gt; &#39;filled&#39;);
+$graph -&gt; default_edge(arrowsize =&gt; 4);
+
+$graph -&gt; add_node(name =&gt; &#39;Carnegie&#39;, shape =&gt; &#39;circle&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Carnegie&#39;, color =&gt; &#39;red&#39;);
+
+$graph -&gt; default_node(style =&gt; &#39;rounded&#39;);
+
+$graph -&gt; add_node(name =&gt; &#39;Murrumbeena&#39;, shape =&gt; &#39;doublecircle&#39;, color =&gt; &#39;green&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Oakleigh&#39;,    shape =&gt; &#39;oval&#39;,         color =&gt; &#39;blue&#39;);
+
+$graph -&gt; add_edge(from =&gt; &#39;Murrumbeena&#39;, to =&gt; &#39;Carnegie&#39;, arrowsize =&gt; 2);
+
+$graph -&gt; default_edge(arrowsize =&gt; 4);
+
+$graph -&gt; add_edge(from =&gt; &#39;Murrumbeena&#39;, to =&gt; &#39;Oakleigh&#39;, color =&gt; &#39;brown&#39;);
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;trivial.$format&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.trivial.svg"></object>
+<br />
 Output file # 33 - gen.trivial.svg
-</p>
 <h3>Input file # 34 - t/gen.unnamed.sub.graph.t</h3>
-<p>
-Demonstrates named and unnamed subgraphs.<br />
-<object data = "gen.unnamed.sub.graph.svg"></object><br />
+<h4>Demonstrates named and unnamed subgraphs.</h4>
+<pre># Annotation: Demonstrates named and unnamed subgraphs.
+
+use strict;
+use warnings;
+
+use File::Spec;
+
+use GraphViz2;
+
+my($graph) = GraphViz2 -&gt; new
+(
+	edge   =&gt; {color =&gt; &#39;grey&#39;},
+	global =&gt; {directed =&gt; 1},
+	graph  =&gt; {label =&gt; &#39;Named and unnamed subgraphs&#39;, rankdir =&gt; &#39;TB&#39;},
+	node   =&gt; {shape =&gt; &#39;oval&#39;},
+);
+
+$graph -&gt; push_subgraph
+(
+	graph =&gt; {label =&gt; &#39;Subgraph One&#39;},
+	node  =&gt; {color =&gt; &#39;magenta&#39;, shape =&gt; &#39;diamond&#39;},
+);
+
+$graph -&gt; add_node(name =&gt; &#39;Chadstone&#39;, shape =&gt; &#39;hexagon&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Waverley&#39;, color =&gt; &#39;orange&#39;);
+
+$graph -&gt; add_edge(from =&gt; &#39;Chadstone&#39;, to =&gt; &#39;Waverley&#39;);
+
+$graph -&gt; pop_subgraph;
+
+$graph -&gt; push_subgraph
+(
+	graph =&gt; {label =&gt; &#39;&#39;},
+	node  =&gt; {color =&gt; &#39;blue3&#39;},
+);
+
+$graph -&gt; add_node(name =&gt; &#39;Glen Waverley&#39;, shape =&gt; &#39;pentagon&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Mount Waverley&#39;, color =&gt; &#39;darkslategrey&#39;, shape =&gt; &#39;rectangle&#39;);
+
+$graph -&gt; add_edge(from =&gt; &#39;Glen Waverley&#39;, to =&gt; &#39;Mount Waverley&#39;);
+
+$graph -&gt; pop_subgraph;
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;unnamed.sub.graph.$format&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.unnamed.sub.graph.svg"></object>
+<br />
 Output file # 34 - gen.unnamed.sub.graph.svg
-</p>
 <h3>Input file # 35 - t/gen.utf8.1.t</h3>
-<p>
-Demonstrates utf8 chars in labels.<br />
-<object data = "gen.utf8.1.svg"></object><br />
+<h4>Demonstrates utf8 chars in labels.</h4>
+<pre># Annotation: Demonstrates utf8 chars in labels.
+
+use strict;
+use utf8;
+use warnings;
+use warnings  qw(FATAL utf8);    # Fatalize encoding glitches.
+use open      qw(:std :utf8);    # Undeclared streams in UTF-8.
+use charnames qw(:full :short);  # Unneeded in v5.16.
+
+use File::Spec;
+
+use GraphViz2;
+
+# ---------------
+
+my($graph) = GraphViz2 -&gt; new
+	(
+	 edge   =&gt; {color =&gt; &#39;grey&#39;},
+	 global =&gt; {directed =&gt; 1},
+	 graph  =&gt; {rankdir =&gt; &#39;TB&#39;},
+	 node   =&gt; {shape =&gt; &#39;oval&#39;},
+	);
+
+$graph -&gt; add_node(name =&gt; &#39;Zero&#39;,  label =&gt; &#39;The Orient Express&#39;);
+$graph -&gt; add_node(name =&gt; &#39;One&#39;,   label =&gt; &#39;Reichwaldstraße&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Two&#39;,   label =&gt; &#39;Böhme&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Three&#39;, label =&gt; &#39;ʎ ʏ ʐ ʑ ʒ ʓ ʙ ʚ&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Four&#39;,  label =&gt; &#39;Πηληϊάδεω Ἀχιλῆος&#39;);
+$graph -&gt; add_node(name =&gt; &#39;Five&#39;,  label =&gt; &#39;ΔΔΔΔΔΔΔΔΔΔΔΔΔΔΔΔΔ&#39;);
+$graph -&gt; add_edge(from =&gt; &#39;Zero&#39;,  to =&gt; &#39;One&#39;);
+$graph -&gt; add_edge(from =&gt; &#39;Zero&#39;,  to =&gt; &#39;Three&#39;);
+$graph -&gt; add_edge(from =&gt; &#39;One&#39;,   to =&gt; &#39;Two&#39;);
+$graph -&gt; add_edge(from =&gt; &#39;Three&#39;, to =&gt; &#39;Four&#39;);
+$graph -&gt; add_edge(from =&gt; &#39;Two&#39;,   to =&gt; &#39;Five&#39;, label =&gt; &#39;Label has a ☃&#39;);
+$graph -&gt; add_edge(from =&gt; &#39;Four&#39;,  to =&gt; &#39;Five&#39;, label =&gt; &#39;Label has a ✔&#39;);
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;utf8.1.$format&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.utf8.1.svg"></object>
+<br />
 Output file # 35 - gen.utf8.1.svg
-</p>
 <h3>Input file # 36 - t/gen.utf8.2.t</h3>
-<p>
-Demonstrates utf8 chars in labels.<br />
-<object data = "gen.utf8.2.svg"></object><br />
+<h4>Demonstrates utf8 chars in labels.</h4>
+<pre># Annotation: Demonstrates utf8 chars in labels.
+
+use strict;
+use utf8;
+use warnings;
+use warnings  qw(FATAL utf8);    # Fatalize encoding glitches.
+use open      qw(:std :utf8);    # Undeclared streams in UTF-8.
+use charnames qw(:full :short);  # Unneeded in v5.16.
+
+use File::Spec;
+
+use GraphViz2;
+
+# ---------------
+
+my($graph) = GraphViz2 -&gt; new
+	(
+	 edge   =&gt; {color =&gt; &#39;grey&#39;},
+	 global =&gt; {directed =&gt; 1},
+	 graph  =&gt; {label =&gt; &#39;5 deltas&#39;, rankdir =&gt; &#39;TB&#39;},
+	 node   =&gt; {shape =&gt; &#39;oval&#39;},
+	);
+
+$graph -&gt; add_node(name =&gt; &#39;5 deltas&#39;,  label =&gt; &#39;ΔΔΔΔΔ&#39;);
+
+if (@ARGV) {
+  my($format)      = shift || &#39;svg&#39;;
+  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;utf8.2.$format&quot;);
+  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file);
+} else {
+  # run as a test
+  require Test::More;
+  require Test::Snapshot;
+  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::More::done_testing();
+}</pre>
+<object data = "gen.utf8.2.svg"></object>
+<br />
 Output file # 36 - gen.utf8.2.svg
-</p>
 
 <hr />
 
@@ -266,7 +2181,7 @@ Date
 <!-- Right -->
 <td>
 <div class="odd_right">
-2020-10-09
+2020-10-11
 </div>
 </td>
 </tr>
