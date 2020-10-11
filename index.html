@@ -66,7 +66,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -105,7 +104,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -148,7 +146,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -219,7 +216,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -300,7 +296,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -365,7 +360,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -416,7 +410,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -490,7 +483,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -548,7 +540,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -608,7 +599,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -666,7 +656,7 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
+  $graph-&gt;run(format =&gt; &#39;dot&#39;); # leave here as a canary so test &quot;run&quot;
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -728,7 +718,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -790,7 +779,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -853,7 +841,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -917,7 +904,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -955,7 +941,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   local our $TODO = &#39;seems to vary by Perl version&#39;;
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
@@ -1001,7 +986,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -1039,7 +1023,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -1077,7 +1060,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -1113,7 +1095,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -1154,7 +1135,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -1217,7 +1197,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -1281,7 +1260,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -1346,7 +1324,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -1411,7 +1388,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -1453,7 +1429,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -1522,7 +1497,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -1603,7 +1577,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -1660,7 +1633,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -1723,7 +1695,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -1806,7 +1777,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -1877,7 +1847,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -1928,7 +1897,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -1987,7 +1955,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -2040,7 +2007,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -2082,7 +2048,6 @@ if (@ARGV) {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  $graph-&gt;run(format =&gt; &#39;dot&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
