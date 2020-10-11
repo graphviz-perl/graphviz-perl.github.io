@@ -123,83 +123,27 @@ use File::Spec;
 
 use GraphViz2;
 
-use IPC::Run3; # For run().
-
-# Generate the dot input.
-
 my($graph) = GraphViz2 -&gt; new
 (
 	edge   =&gt; {color =&gt; &#39;grey&#39;},
 	global =&gt; {directed =&gt; 1},
-	graph  =&gt; {rankdir =&gt; &#39;TB&#39;},
+	graph  =&gt; {
+          rankdir =&gt; &#39;TB&#39;,
+          page =&gt; &#39;8.25,10.75&#39;,
+          rotate =&gt; &#39;90&#39;,
+          margin =&gt; &#39;0.125&#39;,
+          size =&gt; &#39;8.25,10.75&#39;
+        },
 	node   =&gt; {shape =&gt; &#39;oval&#39;},
 );
-
-# Redundant.
-#$graph -&gt; add_node(name =&gt; &#39;Here&#39;);
-#$graph -&gt; add_node(name =&gt; &#39;There&#39;);
-#$graph -&gt; add_node(name =&gt; &#39;Everywhere&#39;);
-
 $graph -&gt; add_edge(from =&gt; &#39;Here&#39;, to =&gt; &#39;There&#39;);
 $graph -&gt; add_edge(from =&gt; &#39;There&#39;, to =&gt; &#39;Everywhere&#39;);
 $graph -&gt; add_edge(from =&gt; &#39;Everywhere&#39;, to =&gt; &#39;Here&#39;);
 
-# Generate the dot output.
-
-$graph -&gt; run;
-
-# Generate the circo output.
-
-my($stdout, $stderr);
-
-run3
-	[
-		&#39;circo&#39;,
-		&#39;-Gpage=8.25,10.75&#39;,
-		&#39;-Grotate=90&#39;,
-		&#39;-Gmargin=0.125&#39;,
-		&#39;-Gsize=8.25,10.75&#39;
-	],
-	\$graph -&gt; dot_input,
-	\$stdout,
-	\$stderr;
-
-die $stderr if ($stderr);
-
-my($circo_output) = $stdout;
-
-#print &#39;-&#39; x 50, &quot;\n&quot;;
-#print $circo_output;
-#print &#39;-&#39; x 50, &quot;\n&quot;;
-
-# Generate the dot output.
-
 if (@ARGV) {
   my($format)      = shift || &#39;svg&#39;;
   my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;circo.$format&quot;);
-
-  run3
-          [
-                  &#39;dot&#39;,
-                  &quot;-T$format&quot;,
-          ],
-          \$circo_output,
-          \$stdout,
-          \$stderr;
-
-  die $stderr if ($stderr);
-
-  my($dot_output) = $stdout;
-
-  #print &#39;-&#39; x 50, &quot;\n&quot;;
-  #print $dot_output;
-  #print &#39;-&#39; x 50, &quot;\n&quot;;
-
-  open(OUT, &#39;&gt;&#39;, $output_file);
-  print OUT $dot_output;
-  close OUT;
-
-  print &quot;Wrote $output_file. \n&quot;;
+  $graph-&gt;run(driver =&gt; &#39;circo&#39;, format =&gt; $format, output_file =&gt; $output_file);
 } else {
   # run as a test
   require Test::More;
