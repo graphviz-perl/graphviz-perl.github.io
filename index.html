@@ -1545,9 +1545,7 @@ $graph-&gt;add_node(name =&gt; &#39;Waverley&#39;, color =&gt; &#39;orange&#39;)
 $graph-&gt;add_edge(from =&gt; &#39;Chadstone&#39;, to =&gt; &#39;Waverley&#39;);
 $graph-&gt;pop_subgraph;
 
-$graph-&gt;push_subgraph(
-	graph =&gt; {label =&gt; &#39;&#39;},
-);
+$graph-&gt;push_subgraph;
 $graph-&gt;add_node(name =&gt; &#39;Glen Waverley&#39;, color =&gt; &#39;blue3&#39;, shape =&gt; &#39;pentagon&#39;);
 $graph-&gt;add_node(name =&gt; &#39;Mount Waverley&#39;, color =&gt; &#39;darkslategrey&#39;, shape =&gt; &#39;rectangle&#39;);
 $graph-&gt;add_edge(from =&gt; &#39;Glen Waverley&#39;, to =&gt; &#39;Mount Waverley&#39;);

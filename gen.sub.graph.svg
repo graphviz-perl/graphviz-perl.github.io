@@ -67,14 +67,14 @@
 <!-- Malvern -->
 <g id="node6" class="node">
 <title>Malvern</title>
-<polygon fill="none" stroke="cyan" points="196.65,-398.98 126.93,-380.98 196.65,-362.98 266.36,-380.98 196.65,-398.98"/>
+<ellipse fill="none" stroke="cyan" cx="196.65" cy="-380.98" rx="49.29" ry="18"/>
 <text text-anchor="middle" x="196.65" y="-377.28" font-family="Times,serif" font-size="14.00">Malvern</text>
 </g>
 <!-- Malvern&#45;&gt;Murrumbeena -->
 <g id="edge5" class="edge">
 <title>Malvern&#45;&gt;Murrumbeena</title>
-<path fill="none" stroke="grey" d="M187.45,-365.2C180.93,-354.73 171.63,-339.79 161.82,-324.03"/>
-<polygon fill="grey" stroke="grey" points="164.59,-321.85 156.33,-315.21 158.65,-325.55 164.59,-321.85"/>
+<path fill="none" stroke="grey" d="M186.3,-363.36C179.83,-352.97 170.99,-338.76 161.7,-323.83"/>
+<polygon fill="grey" stroke="grey" points="164.44,-321.62 156.19,-314.98 158.5,-325.32 164.44,-321.62"/>
 </g>
 <!-- Prahran -->
 <g id="node7" class="node">
@@ -85,8 +85,8 @@
 <!-- Malvern&#45;&gt;Prahran -->
 <g id="edge4" class="edge">
 <title>Malvern&#45;&gt;Prahran</title>
-<path fill="none" stroke="grey" d="M205.96,-365.2C220,-342.9 246.81,-300.34 264.2,-272.74"/>
-<polygon fill="grey" stroke="grey" points="267.33,-274.33 269.7,-264 261.41,-270.6 267.33,-274.33"/>
+<path fill="none" stroke="grey" d="M207.11,-363.36C221.5,-340.53 247.51,-299.24 264.42,-272.39"/>
+<polygon fill="grey" stroke="grey" points="267.41,-274.21 269.78,-263.88 261.49,-270.48 267.41,-274.21"/>
 </g>
 </g>
 </svg>
