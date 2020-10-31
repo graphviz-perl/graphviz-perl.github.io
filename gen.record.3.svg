@@ -9,7 +9,7 @@
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 398.48)">
 <title>Perl</title>
 <polygon fill="white" stroke="transparent" points="-4,4 -4,-398.48 633,-398.48 633,4 -4,4"/>
-<text text-anchor="middle" x="314.5" y="-7.8" font-family="Times,serif" font-size="14.00">Record demo 3 &#45; Deeply nested records using strings as labels</text>
+<text text-anchor="middle" x="314.5" y="-7.8" font-family="Times,serif" font-size="14.00">Record demo 3 &#45; Deeply nested records using nested array&#45;refs</text>
 <!-- Alphabet -->
 <g id="node1" class="node">
 <title>Alphabet</title>

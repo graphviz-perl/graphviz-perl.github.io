@@ -1159,8 +1159,8 @@ if (@ARGV) {
 <br />
 Output file # 24 - gen.record.2.svg
 <h3>Input file # 25 - t/gen.record.3.t</h3>
-<h4>Deeply nested records using strings as labels.</h4>
-<pre># Annotation: Deeply nested records using strings as labels.
+<h4>Deeply nested records using nested array-refs.</h4>
+<pre># Annotation: Deeply nested records using nested array-refs.
 
 use strict;
 use warnings;
@@ -1169,55 +1169,61 @@ use GraphViz2;
 
 my $id    = &#39;3&#39;;
 my $graph = GraphViz2-&gt;new(
-	global =&gt; {directed =&gt; 1},
+	global =&gt; {directed =&gt; 1, combine_node_and_port =&gt; 0, record_shape =&gt; &#39;record&#39;},
 	graph  =&gt; {
           label =&gt; &quot;Record demo $id - Deeply nested records &quot; .
-            &quot;using strings as labels&quot;
+            &quot;using nested array-refs&quot;
         },
-	node   =&gt; {shape =&gt; &#39;record&#39;},
 );
 
-$graph-&gt;add_node(name =&gt; &#39;Alphabet&#39;,
-label =&gt; join(&#39;|&#39;,
-  &#39;&lt;port_a&gt; a:port_a &#39;,
-  &#39;{&lt;port_b&gt; b:port_b &#39;,
-  &#39; c &#39;,
-  &#39;{&lt;port_d&gt; d:port_d &#39;,
-  &#39; e &#39;,
-  &#39; f &#39;,
-  &#39;{ g &#39;,
-  &#39;&lt;port_h&gt; h:port_h &#39;,
-  &#39; i &#39;,
-  &#39; j &#39;,
-  &#39;{ k &#39;,
-  &#39; l &#39;,
-  &#39; m &#39;,
-  &#39;&lt;port_n&gt; n:port_n &#39;,
-  &#39; o &#39;,
-  &#39; p}&#39;,
-  &#39; q &#39;,
-  &#39; r &#39;,
-  &#39;&lt;port_s&gt; s:port_s &#39;,
-  &#39; t }&#39;,
-  &#39; u &#39;,
-  &#39; v &#39;,
-  &#39;&lt;port_w&gt; w:port_w }&#39;,
-  &#39; x &#39;,
-  &#39;&lt;port_y&gt; y:port_y }&#39;,
-  &#39; z&#39;,
-));
+$graph-&gt;add_node(name =&gt; &#39;Alphabet&#39;, label =&gt; [
+  { port =&gt; &#39;port_a&#39;, text =&gt; &#39;a:port_a&#39; },
+  [
+    { port =&gt; &#39;port_b&#39;, text =&gt; &#39;b:port_b&#39; },
+    &#39;c&#39;,
+    [
+      { port =&gt; &#39;port_d&#39;, text =&gt; &#39;d:port_d&#39; },
+      &#39;e&#39;,
+      &#39;f&#39;,
+      [
+        &#39;g&#39;,
+        { port =&gt; &#39;port_h&#39;, text =&gt; &#39;h:port_h&#39; },
+        &#39;i&#39;,
+        &#39;j&#39;,
+        [
+          &#39;k&#39;,
+          &#39;l&#39;,
+          &#39;m&#39;,
+          { port =&gt; &#39;port_n&#39;, text =&gt; &#39;n:port_n&#39; },
+          &#39;o&#39;,
+          &#39;p&#39;,
+        ],
+        &#39;q&#39;,
+        &#39;r&#39;,
+        { port =&gt; &#39;port_s&#39;, text =&gt; &#39;s:port_s&#39; },
+        &#39;t&#39;,
+      ],
+      &#39;u&#39;,
+      &#39;v&#39;,
+      { port =&gt; &#39;port_w&#39;, text =&gt; &#39;w:port_w&#39; },
+    ],
+    &#39;x&#39;,
+    { port =&gt; &#39;port_y&#39;, text =&gt; &#39;y:port_y&#39; },
+  ],
+  &#39;z&#39;,
+]);
 
 $graph -&gt; add_edge(
-  from =&gt; &#39;Alphabet:port_a&#39;, to =&gt; &#39;Alphabet:port_n&#39;, color =&gt; &#39;maroon&#39;,
+  from =&gt; &#39;Alphabet&#39;, tailport =&gt; &#39;port_a&#39;, to =&gt; &#39;Alphabet&#39;, headport =&gt; &#39;port_n&#39;, color =&gt; &#39;maroon&#39;,
 );
 $graph -&gt; add_edge(
-  from =&gt; &#39;Alphabet:port_b&#39;, to =&gt; &#39;Alphabet:port_s&#39;, color =&gt; &#39;blue&#39;,
+  from =&gt; &#39;Alphabet&#39;, tailport =&gt; &#39;port_b&#39;, to =&gt; &#39;Alphabet&#39;, headport =&gt; &#39;port_s&#39;, color =&gt; &#39;blue&#39;,
 );
 $graph -&gt; add_edge(
-  from =&gt; &#39;Alphabet:port_d&#39;, to =&gt; &#39;Alphabet:port_w&#39;, color =&gt; &#39;red&#39;,
+  from =&gt; &#39;Alphabet&#39;, tailport =&gt; &#39;port_d&#39;, to =&gt; &#39;Alphabet&#39;, headport =&gt; &#39;port_w&#39;, color =&gt; &#39;red&#39;,
 );
 $graph -&gt; add_edge(
-  from =&gt; &#39;Alphabet:port_y&#39;, to =&gt; &#39;Alphabet:port_h&#39;, color =&gt; &#39;green&#39;,
+  from =&gt; &#39;Alphabet&#39;, tailport =&gt; &#39;port_y&#39;, to =&gt; &#39;Alphabet&#39;, headport =&gt; &#39;port_h&#39;, color =&gt; &#39;green&#39;,
 );
 
 if (@ARGV) {
