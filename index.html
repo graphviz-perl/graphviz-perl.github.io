@@ -2,7 +2,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-	<title>Index of sample files created by GraphViz2 V 2.56</title>
+	<title>Index of sample files created by GraphViz2 V 2.59</title>
 	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="pragma" content="no-cache">
@@ -10,7 +10,7 @@
 	<link rel="stylesheet" type="text/css" href="/assets/css/graphviz2/fancy.table.css">
 </head>
 <body>
-	<h1>Index of sample files created by <a href="http://metacpan.org/release/GraphViz2">GraphViz2</a> V 2.56.</h1>
+	<h1>Index of sample files created by <a href="http://metacpan.org/release/GraphViz2">GraphViz2</a> V 2.59.</h1>
 
 	<p>All scripts and input files required to generate these examples are available in the GraphViz2 repo.</p>
 
@@ -810,7 +810,8 @@ my $graph = GraphViz2-&gt;new(
 );
 my $g = GraphViz2::Parse::Regexp-&gt;new(graph =&gt; $graph);
 
-$g-&gt;create(regexp =&gt; &#39;(([abcd0-9])|(foo))&#39;);
+my $re = &#39;^(([abcd0-9])|(foo)n?)x*y{1,2}&#39;;
+$g-&gt;create(regexp =&gt; $re);
 
 if (@ARGV) {
   my($format)      = shift || &#39;svg&#39;;
@@ -821,6 +822,9 @@ if (@ARGV) {
   require Test::More;
   require Test::Snapshot;
   local our $TODO = &#39;seems to vary by Perl version&#39;;
+  my $gd = GraphViz2::Parse::Regexp::to_graph($re);
+  my $gvre = GraphViz2::Parse::Regexp-&gt;new(as_graph =&gt; $gd);
+  Test::Snapshot::is_deeply_snapshot($gvre-&gt;graph-&gt;dot_input, &#39;dot file&#39;);
   Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
@@ -845,12 +849,12 @@ sub read_file {
 
 my $graph = GraphViz2-&gt;new(
 	edge   =&gt; {color =&gt; &#39;grey&#39;},
-	global =&gt; {directed =&gt; 1},
+	global =&gt; {directed =&gt; 1, combine_node_and_port =&gt; 0},
 	graph  =&gt; {rankdir =&gt; &#39;LR&#39;},
 	node   =&gt; {color =&gt; &#39;green&#39;, shape =&gt; &#39;oval&#39;},
 );
 my $g = GraphViz2::Parse::STT-&gt;new(graph =&gt; $graph);
-my $stt = read_file(File::Spec-&gt;catfile(&#39;t&#39;, &#39;sample.stt.1.dat&#39;) );
+my $stt = read_file(File::Spec-&gt;catfile(&#39;t&#39;, &#39;sample.stt.2.dat&#39;) );
 
 $g-&gt;create(stt =&gt; $stt);
 
@@ -880,7 +884,7 @@ use GraphViz2::Parse::Yacc;
 
 my $graph = GraphViz2-&gt;new(
 	edge   =&gt; {color =&gt; &#39;grey&#39;},
-	global =&gt; {directed =&gt; 1},
+	global =&gt; {directed =&gt; 1, combine_node_and_port =&gt; 0},
 	graph  =&gt; {concentrate =&gt; 1, rankdir =&gt; &#39;TB&#39;},
 	node   =&gt; {color =&gt; &#39;blue&#39;, shape =&gt; &#39;oval&#39;},
 );
@@ -914,7 +918,7 @@ use GraphViz2::Parse::Yapp;
 
 my $graph = GraphViz2-&gt;new(
 	edge   =&gt; {color =&gt; &#39;grey&#39;},
-	global =&gt; {directed =&gt; 1},
+	global =&gt; {directed =&gt; 1, combine_node_and_port =&gt; 0},
 	graph  =&gt; {concentrate =&gt; 1, rankdir =&gt; &#39;TB&#39;},
 	node   =&gt; {color =&gt; &#39;blue&#39;, shape =&gt; &#39;oval&#39;},
 );
@@ -1115,7 +1119,7 @@ use GraphViz2;
 
 my $id    = &#39;2&#39;;
 my $graph = GraphViz2-&gt;new(
-	global =&gt; {directed =&gt; 1},
+	global =&gt; {directed =&gt; 1, combine_node_and_port =&gt; 0},
 	graph  =&gt; {label =&gt; &quot;Record demo $id - Nested records using an arrayref of hashrefs as labels&quot;},
 	node   =&gt; {shape =&gt; &#39;record&#39;},
 );
@@ -1123,35 +1127,22 @@ my $graph = GraphViz2-&gt;new(
 $graph-&gt;add_node(name =&gt; &#39;struct1&#39;, label =&gt; &#39;&lt;f0&gt; left|&lt;f1&gt; mid dle|&lt;f2&gt; right&#39;);
 $graph-&gt;add_node(name =&gt; &#39;struct2&#39;, label =&gt; &#39;&lt;f0&gt; one|&lt;f1&gt; two&#39;);
 $graph-&gt;add_node(name =&gt; &#39;struct3&#39;, label =&gt; [
-	{
-		text =&gt; &quot;hello\\nworld&quot;,
-	},
-	{
-		text =&gt; &#39;{b&#39;,
-	},
-	{
-		text =&gt; &#39;{c&#39;,
-	},
-	{
-		port =&gt; &#39;&lt;here&gt;&#39;,
-		text =&gt; &#39;d&#39;,
-	},
-	{
-		text =&gt; &#39;e}&#39;,
-	},
-	{
-		text =&gt; &#39;f}&#39;,
-	},
-	{
-		text =&gt; &#39;g&#39;,
-	},
-	{
-		text =&gt; &#39;h&#39;,
-	},
+	{ text =&gt; &quot;hello\\nworld&quot; },
+	[
+		{ text =&gt; &#39;b&#39; },
+		[
+			{ text =&gt; &#39;c{|}&lt;&gt;&quot;&quot;&#39; },
+			{ text =&gt; &#39;d&#39;, port =&gt; &#39;here&#39; },
+			{ text =&gt; &#39;e&#39; },
+		],
+		{ text =&gt; &#39;f&#39; },
+	],
+	{ text =&gt; &#39;g&#39; },
+	{ text =&gt; &#39;h&#39; },
 ]);
 
-$graph-&gt;add_edge(from =&gt; &#39;struct1:f1&#39;, to =&gt; &#39;struct2:f0&#39;,   color =&gt; &#39;blue&#39;);
-$graph-&gt;add_edge(from =&gt; &#39;struct1:f2&#39;, to =&gt; &#39;struct3:here&#39;, color =&gt; &#39;red&#39;);
+$graph-&gt;add_edge(from =&gt; &#39;struct1&#39;, tailport =&gt; &#39;f1&#39;, to =&gt; &#39;struct2&#39;, headport =&gt; &#39;f0&#39;,   color =&gt; &#39;blue&#39;);
+$graph-&gt;add_edge(from =&gt; &#39;struct1&#39;, tailport =&gt; &#39;f2&#39;, to =&gt; &#39;struct3&#39;, headport =&gt; &#39;here&#39;, color =&gt; &#39;red&#39;);
 
 if (@ARGV) {
   my($format)      = shift || &#39;svg&#39;;
@@ -1646,7 +1637,7 @@ Date
 <!-- Right -->
 <td>
 <div class="odd_right">
-2020-10-15
+2020-10-31
 </div>
 </td>
 </tr>
