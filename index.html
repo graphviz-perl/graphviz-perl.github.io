@@ -850,7 +850,6 @@ sub read_file {
 my $graph = GraphViz2-&gt;new(
 	edge   =&gt; {color =&gt; &#39;grey&#39;},
 	global =&gt; {directed =&gt; 1, combine_node_and_port =&gt; 0},
-	graph  =&gt; {rankdir =&gt; &#39;LR&#39;},
 	node   =&gt; {color =&gt; &#39;green&#39;, shape =&gt; &#39;oval&#39;},
 );
 my $g = GraphViz2::Parse::STT-&gt;new(graph =&gt; $graph);
