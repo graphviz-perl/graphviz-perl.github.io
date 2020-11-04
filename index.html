@@ -847,25 +847,20 @@ sub read_file {
   &lt;$fh&gt;;
 }
 
-my $graph = GraphViz2-&gt;new(
-	edge   =&gt; {color =&gt; &#39;grey&#39;},
-	global =&gt; {directed =&gt; 1, combine_node_and_port =&gt; 0},
-	node   =&gt; {color =&gt; &#39;green&#39;, shape =&gt; &#39;oval&#39;},
-);
-my $g = GraphViz2::Parse::STT-&gt;new(graph =&gt; $graph);
-my $stt = read_file(File::Spec-&gt;catfile(&#39;t&#39;, &#39;sample.stt.2.dat&#39;) );
-
-$g-&gt;create(stt =&gt; $stt);
+my $stt = read_file(File::Spec-&gt;catfile(&#39;t&#39;, &#39;sample.stt.2.dat&#39;));
+my $g = GraphViz2::Parse::STT-&gt;new(stt =&gt; $stt, mode =&gt; &#39;re_structs&#39;);
 
 if (@ARGV) {
-  my($format)      = shift || &#39;svg&#39;;
-  my($output_file) = shift || File::Spec -&gt; catfile(&#39;html&#39;, &quot;parse.stt.$format&quot;);
-  $graph -&gt; run(format =&gt; $format, output_file =&gt; $output_file);
+  my $format = shift || &#39;svg&#39;;
+  my $output_file = shift || File::Spec-&gt;catfile(&#39;html&#39;, &quot;parse.stt.$format&quot;);
+  my $mode = shift; # default in the module
+  my $graph = GraphViz2-&gt;from_graph(GraphViz2::Parse::STT::graphvizify($g-&gt;as_graph, $mode));
+  $graph-&gt;run(format =&gt; $format, output_file =&gt; $output_file);
 } else {
   # run as a test
   require Test::More;
   require Test::Snapshot;
-  Test::Snapshot::is_deeply_snapshot($graph-&gt;dot_input, &#39;dot file&#39;);
+  Test::Snapshot::is_deeply_snapshot($g-&gt;graph-&gt;dot_input, &#39;dot file&#39;);
   Test::More::done_testing();
 }</pre>
 <object data = "gen.parse.stt.svg"></object>
@@ -1642,7 +1637,7 @@ Date
 <!-- Right -->
 <td>
 <div class="odd_right">
-2020-11-01
+2020-11-04
 </div>
 </td>
 </tr>
